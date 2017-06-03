@@ -24,6 +24,7 @@ class EntitiesShow extends StatefulWidget {
 }
 
 class _EntitiesShowState extends State<EntitiesShow> {
+  // TODO encodedTitle
   Map entity;
 
   @override
@@ -39,11 +40,42 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget content = ( entity == null )
+                           ?
+                           (
+                             new SliverFillRemaining(
+                               child: new Center(
+                                 child: new CircularProgressIndicator()
+                               )
+                             )
+                           )
+                           :
+                           (
+                             new SliverList(
+                               delegate: new SliverChildListDelegate(_contentsList(context))
+                             )
+                           );
+
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.title),
-      ),
-      body: _buildContent(context),
+      body: new CustomScrollView(
+        slivers: <Widget>[
+          new SliverAppBar(
+            expandedHeight: 256.0,
+            floating: true,
+            snap: true,
+            flexibleSpace: new FlexibleSpaceBar(
+              title: new Text(widget.title),
+              background: new Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  _buildCoverImg()
+                ]
+              )
+            ),
+          ),
+          content
+        ]
+      )
     );
   }
 
@@ -55,21 +87,23 @@ class _EntitiesShowState extends State<EntitiesShow> {
     return entity;
   }
 
-  Widget _buildContent(BuildContext context) {
-    if (entity == null) {
-      return new Center(
-        child: new CircularProgressIndicator()
-      );
-    }
-
-    List<Widget> widgetsList = [];
-
-    // cover image
-    // TODO multiple image urls
-    if ( entity['lead']['image'] != Null ) {
+  Widget _buildCoverImg() {
+    if (entity != null && entity['lead']['image'] != Null ) {
+      // TODO multiple image urls
       final imageUrl = 'https:' + entity['lead']['image']['urls'][entity['lead']['image']['urls'].keys.last];
-      widgetsList.add(new Image.network(imageUrl, fit: BoxFit.cover));
+      return new Image.network(
+        imageUrl,
+        height: 256.0,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return new Image.network('http://via.placeholder.com/256x256?text=placeholder', fit: BoxFit.cover);
     }
+
+  }
+
+  List<Widget> _contentsList(BuildContext context) {
+    List<Widget> widgetsList = [];
 
     final htmlParser = new HtmlParser(theme: Theme.of(context).textTheme);
 
@@ -100,8 +134,6 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
     }
 
-    return new ListView(
-      children: widgetsList
-    );
+    return widgetsList;
   }
 }

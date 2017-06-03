@@ -4,6 +4,7 @@ import './views/pages/home.dart';
 import './views/entities/show.dart';
 
 void main() {
+  // TODO splash-screen
   runApp(new WikiFlutter());
 }
 
@@ -11,12 +12,33 @@ class WikiFlutter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'WikiFlutter',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
-      // home: new PagesHome(),
-      home: new EntitiesShow(title: 'Doraemon'),
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) => new PagesHome(),
+      },
+      onGenerateRoute: _handleRoute,
     );
   }
+
+  Route<Null> _handleRoute(RouteSettings settings) {
+    print('--- handling route');
+    print(settings);
+    final List<String> path = settings.name.split('/');
+
+    // /entities/:title
+    if ( path.length == 3 && path[0] == '' && path[1] == 'entities' ) {
+      final String title = path[2];
+
+      return new MaterialPageRoute<Null>(
+        settings: settings,
+        builder: (BuildContext context) => new EntitiesShow(title: title)
+      );
+    }
+
+    return null;
+  }
+
 }

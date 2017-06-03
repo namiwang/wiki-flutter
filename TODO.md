@@ -1,15 +1,17 @@
 # v0
 
-- sliver
 - image
   - caption
 - table
 - lists
-- nav and routing
 
 # v1
 
+- key and hero transition
 - ciatation via snackbar
+- splash screen
+
+- title text in appbar above background image may be indistinguishable with the image, say both are white
 
 # later
 

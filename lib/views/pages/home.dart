@@ -5,6 +5,41 @@ class PagesHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('a');
+    return new Scaffold(
+      body: new CustomScrollView(
+        slivers: <Widget>[
+          new SliverAppBar(
+            expandedHeight: 256.0,
+            floating: true,
+            snap: true,
+            flexibleSpace: new FlexibleSpaceBar(
+              title: new Text('Wiki Flutter'),
+              background: new Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  new Image.network(
+                    "http://placehold.it/256x256",
+                    fit: BoxFit.cover,
+                    height: 256.0
+                  ),
+                ]
+              )
+            ),
+          ),
+          new SliverList(
+            delegate: new SliverChildListDelegate(_entitiesList(context))
+          )
+        ]
+      )
+    );
+  }
+
+  List<Widget> _entitiesList(BuildContext context) {
+    return [
+      new ListTile(
+        title: new Text('Doraemon'),
+        onTap: (){ Navigator.pushNamed(context, "/entities/Doraemon"); }
+      )
+    ];
   }
 }

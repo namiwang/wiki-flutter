@@ -25,10 +25,10 @@ class HtmlParser {
     _parseNode(body);
     _tryCloseCurrentTextSpan();
 
-    print('--- parsed');
-    print('widgets: ' + _widgets.length.toString());
-    print((_widgets.first as RichText).text);
-    print((_widgets.first as RichText).text.toPlainText());
+    // print('--- parsed');
+    // print('widgets: ' + _widgets.length.toString());
+    // print((_widgets.first as RichText).text);
+    // print((_widgets.first as RichText).text.toPlainText());
 
     return new Wrap(children: _widgets);
   }
@@ -52,8 +52,8 @@ class HtmlParser {
   // TODO lists like <li>
 
   void _parseNode(html.Node node) {
-    print('--- _parseNode');
-    print(node.toString());
+    // print('--- _parseNode');
+    // print(node.toString());
 
     switch (node.nodeType) {
       case html.Node.ELEMENT_NODE:
@@ -68,8 +68,8 @@ class HtmlParser {
   }
 
   void _parseElement(html.Element element) {
-    print('--- _parseElement');
-    print(element.toString());
+    // print('--- _parseElement');
+    // print(element.toString());
 
     switch (element.localName) {
       case 'p':
