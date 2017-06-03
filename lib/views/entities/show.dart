@@ -24,14 +24,13 @@ class EntitiesShow extends StatefulWidget {
 }
 
 class _EntitiesShowState extends State<EntitiesShow> {
-  // TODO encodedTitle
   Map entity;
 
   @override
   void initState() {
     super.initState();
 
-    _fetchEntity(widget.title).then( (fetchedEntity) {
+    _fetchEntity().then( (fetchedEntity) {
       setState((){
         this.entity = fetchedEntity;
       });
@@ -40,17 +39,13 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget content = ( entity == null )
-                           ?
-                           (
+    final Widget content = ( entity == null ) ? (
                              new SliverFillRemaining(
                                child: new Center(
                                  child: new CircularProgressIndicator()
                                )
                              )
-                           )
-                           :
-                           (
+                           ) : (
                              new SliverList(
                                delegate: new SliverChildListDelegate(_contentsList(context))
                              )
@@ -79,8 +74,14 @@ class _EntitiesShowState extends State<EntitiesShow> {
     );
   }
 
-  Future<Map> _fetchEntity(String title) async {
-    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/$title";
+  Future<Map> _fetchEntity() async {
+    String encodeTitle(String title) {
+      return title.replaceAll(' ', '_');
+    }
+
+    final String encodedTitle = encodeTitle(widget.title);
+
+    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/$encodedTitle";
 
     final Map entity = JSON.decode(await http.read(url));
 

@@ -35,11 +35,13 @@ class PagesHome extends StatelessWidget {
   }
 
   List<Widget> _entitiesList(BuildContext context) {
-    return [
-      new ListTile(
-        title: new Text('Doraemon'),
-        onTap: (){ Navigator.pushNamed(context, "/entities/Doraemon"); }
-      )
-    ];
+    final titles = ['Doraemon', 'European Union'];
+
+    return titles.map((t){
+      return new ListTile(
+        title: new Text(t),
+        onTap: (){ Navigator.pushNamed(context, "/entities/$t"); }
+      );
+    }).toList();
   }
 }
