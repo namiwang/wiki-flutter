@@ -1,10 +1,14 @@
 // TODO
-// - image placeholder/loader
-// - cover image in appbar
 // - entity
 //   - issues
 //   - hatnotes
 //   - category
+
+// sections, listtile.title
+// - text contains html tags like <span> MUST DONE
+// - BUT long text eclipse MUST DONE
+
+// sections, listTile.selected
 
 import 'dart:async';
 import 'dart:convert';
@@ -13,6 +17,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../../shared/html_parser.dart';
+
+import './sections/show.dart';
 
 class EntitiesShow extends StatefulWidget {
   EntitiesShow({Key key, this.title}) : super(key: key);
@@ -25,6 +31,12 @@ class EntitiesShow extends StatefulWidget {
 
 class _EntitiesShowState extends State<EntitiesShow> {
   Map entity;
+
+  // TODO PERFORMANCE
+  // not that elegant,
+  // should share one parser in the whold app
+  // maybe should also share theme data
+  HtmlParser _htmlParser;
 
   @override
   void initState() {
@@ -39,6 +51,8 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   @override
   Widget build(BuildContext context) {
+    _htmlParser = new HtmlParser(theme: Theme.of(context).textTheme);
+
     final Widget content = ( entity == null ) ? (
                              new SliverFillRemaining(
                                child: new Center(
@@ -70,7 +84,10 @@ class _EntitiesShowState extends State<EntitiesShow> {
           ),
           content
         ]
-      )
+      ),
+      // floatingActionButton: new FloatingActionButton(
+      //   child: new Text('a')
+      // ),
     );
   }
 
@@ -79,6 +96,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
       return title.replaceAll(' ', '_');
     }
 
+    // TODO use encodedTitle
     final String encodedTitle = encodeTitle(widget.title);
 
     final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/$encodedTitle";
@@ -106,35 +124,57 @@ class _EntitiesShowState extends State<EntitiesShow> {
   List<Widget> _contentsList(BuildContext context) {
     List<Widget> widgetsList = [];
 
-    final htmlParser = new HtmlParser(theme: Theme.of(context).textTheme);
-
     // title
-    widgetsList.add(new Text(entity['lead']['displaytitle']));
+    // TODO title is already in the appbar, though still need to handle super-long title
+    // widgetsList.add(new Text(entity['lead']['displaytitle']));
 
     // description
-    widgetsList.add(new Text(entity['lead']['description']));
+    widgetsList.add(new Text(entity['lead']['description'], style: Theme.of(context).textTheme.subhead));
     widgetsList.add(const Divider());
 
     // main section
-    widgetsList.add(htmlParser.parse(entity['lead']['sections'][0]['text']));
+    widgetsList.add(_htmlParser.parse(entity['lead']['sections'][0]['text']));
     widgetsList.add(const Divider());
 
     // remaining sections list
-    if (entity['lead']['sections'].length > 1) {
-      final sections = entity['remaining']['sections'];
-
-      for (var section in sections) {
-        final String titleText = (new List<String>.filled(section['toclevel'], '- ')).join() + section['line'];
-        final tile = new ListTile(
-          title: new Text(titleText)
-        );
-
-        widgetsList.add(tile);
-        widgetsList.add(const Divider());
-      }
-
-    }
+    widgetsList.addAll(_remainingSectionTiles());
 
     return widgetsList;
+  }
+
+  List<Widget> _remainingSectionTiles () {
+    if (entity['lead']['sections'].length < 1) { return []; }
+
+    List tiles = [];
+
+    for (var section in entity['remaining']['sections']) {
+      final tile = new ListTile(
+        title:
+          new Row(
+            children:
+              new List<Widget>
+                .filled( section['toclevel'], new Icon(Icons.chevron_right), growable: true )
+                ..add(
+                  new Expanded(
+                    child: _htmlParser.parse(section['line'])
+                  )
+                )
+          ),
+        onTap: (){
+          Navigator.of(context).push(
+            new MaterialPageRoute<Null>(
+              builder: (BuildContext context) {
+                return new EntitiesSectionsShow(entity: entity, sectionId: section['id']);
+              }
+            )
+          );
+        },
+      );
+
+      tiles.add(tile);
+      tiles.add(const Divider());
+    }
+
+    return tiles;
   }
 }

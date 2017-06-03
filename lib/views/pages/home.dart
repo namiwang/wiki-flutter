@@ -18,7 +18,7 @@ class PagesHome extends StatelessWidget {
                 fit: StackFit.expand,
                 children: <Widget>[
                   new Image.network(
-                    "http://placehold.it/256x256",
+                    "http://placehold.it/256x256", // TODO DUMMY
                     fit: BoxFit.cover,
                     height: 256.0
                   ),

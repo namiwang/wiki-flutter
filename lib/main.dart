@@ -5,10 +5,10 @@ import './views/entities/show.dart';
 
 void main() {
   // TODO splash-screen
-  runApp(new WikiFlutter());
+  runApp(new WikiFlutterApp());
 }
 
-class WikiFlutter extends StatelessWidget {
+class WikiFlutterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -26,6 +26,9 @@ class WikiFlutter extends StatelessWidget {
   Route<Null> _handleRoute(RouteSettings settings) {
     print('--- handling route');
     print(settings);
+
+    // TODO not that elegant
+
     final List<String> path = settings.name.split('/');
 
     // /entities/:title
