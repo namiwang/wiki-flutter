@@ -13,12 +13,13 @@
     - main article
     - see also
 
+- elegant nested sections
+  - maybe outline in drawer
+
 - key and hero transition
 
-- elegant nested sections
-  - maybe outline in sidebar menu
-
-- sidebar menu
+- drawer
+  - about modal
 
 - handle long entity title in entity/show/appbar
 - handle long section title in entity/section/show/appbar

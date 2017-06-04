@@ -8,7 +8,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../shared/html_parser.dart';
+import '../../shared/html_wrapper.dart';
 
 class EntitiesSectionsShow extends StatelessWidget {
   final Map entity;
@@ -18,8 +18,6 @@ class EntitiesSectionsShow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HtmlParser htmlParser = new HtmlParser(theme: Theme.of(context).textTheme);
-
     // section content
     Map section = entity['remaining']['sections'][sectionId - 1];
 
@@ -35,10 +33,10 @@ class EntitiesSectionsShow extends StatelessWidget {
     List<Widget> contentWidgets = [];
 
     contentWidgets.add(
-      htmlParser.parse(section['text'])
+      new HtmlWrapper(htmlStr: section['text'])
     );
 
-    contentWidgets.addAll(_nestedSectionTiles(context, htmlParser, nestedSections));
+    contentWidgets.addAll(_nestedSectionTiles(context, nestedSections));
 
     return new Scaffold(
       body: new CustomScrollView(
@@ -65,7 +63,7 @@ class EntitiesSectionsShow extends StatelessWidget {
     );
   }
 
-  List<Widget> _nestedSectionTiles (BuildContext context, HtmlParser htmlParser, List<Map> sections) {
+  List<Widget> _nestedSectionTiles (BuildContext context, List<Map> sections) {
     List<Widget> tiles = [];
 
     for (var section in sections) {
@@ -77,7 +75,7 @@ class EntitiesSectionsShow extends StatelessWidget {
                 .filled( section['toclevel'], new Icon(Icons.chevron_right), growable: true )
                 ..add(
                   new Expanded(
-                    child: htmlParser.parse(section['line'])
+                    child: new HtmlWrapper(htmlStr: section['line'])
                   )
                 )
           ),

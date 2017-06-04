@@ -16,7 +16,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import '../../shared/html_parser.dart';
+import '../shared/html_wrapper.dart';
 
 import './sections/show.dart';
 
@@ -32,12 +32,6 @@ class EntitiesShow extends StatefulWidget {
 class _EntitiesShowState extends State<EntitiesShow> {
   Map entity;
 
-  // TODO PERFORMANCE
-  // not that elegant,
-  // should share one parser in the whold app
-  // maybe should also share theme data
-  HtmlParser _htmlParser;
-
   @override
   void initState() {
     super.initState();
@@ -51,8 +45,6 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   @override
   Widget build(BuildContext context) {
-    _htmlParser = new HtmlParser(theme: Theme.of(context).textTheme);
-
     final Widget content = ( entity == null ) ? (
                              new SliverFillRemaining(
                                child: new Center(
@@ -85,9 +77,6 @@ class _EntitiesShowState extends State<EntitiesShow> {
           content
         ]
       ),
-      // floatingActionButton: new FloatingActionButton(
-      //   child: new Text('a')
-      // ),
     );
   }
 
@@ -133,7 +122,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
     widgetsList.add(const Divider());
 
     // main section
-    widgetsList.add(_htmlParser.parse(entity['lead']['sections'][0]['text']));
+    widgetsList.add(new HtmlWrapper(htmlStr: entity['lead']['sections'][0]['text']));
     widgetsList.add(const Divider());
 
     // remaining sections list
@@ -156,7 +145,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
                 .filled( section['toclevel'], new Icon(Icons.chevron_right), growable: true )
                 ..add(
                   new Expanded(
-                    child: _htmlParser.parse(section['line'])
+                    child: new HtmlWrapper(htmlStr: section['line'])
                   )
                 )
           ),

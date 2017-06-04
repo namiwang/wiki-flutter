@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as html show parse;
 import 'package:html/dom.dart' as html;
 
-class HtmlParser {
-  final TextTheme theme;
+class _HtmlParser {
+  final String htmlStr;
+  final TextTheme textTheme;
+
+  _HtmlParser({this.htmlStr, this.textTheme});
 
   List<Widget> _widgets = [];
   List<TextSpan> _currentTextSpans = [];
 
-  HtmlParser({this.theme});
-
-  Widget parse(String htmlStr) {
+  Widget parse () {
     print('HtmlParser parsing: ' + htmlStr);
 
     // init
@@ -108,12 +109,23 @@ class HtmlParser {
       final richText = new RichText(
         text: new TextSpan(
           children: _currentTextSpans,
-          style: theme.body1
+          style: textTheme.body1
         )
       );
 
       _widgets.add(richText);
       _currentTextSpans = [];
     }
+  }
+}
+
+class HtmlWrapper extends StatelessWidget {
+  final String htmlStr;
+
+  HtmlWrapper({ Key key, this.htmlStr }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return (new _HtmlParser(htmlStr: htmlStr, textTheme: Theme.of(context).textTheme)).parse();
   }
 }
