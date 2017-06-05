@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as html show parse;
 import 'package:html/dom.dart' as html;
 
+import './image_with_loader.dart';
+
 class _HtmlParser {
   final String htmlStr;
   final TextTheme textTheme;
@@ -98,8 +100,8 @@ class _HtmlParser {
         // - click to show a fullscreen image
         // - support animated gif
 
-        final String imgSrc = 'https:' + element.attributes['src'];
-        final img = new Image.network(imgSrc, fit: BoxFit.contain);
+        final imgSrc = 'https:' + element.attributes['src'];
+        final img = new ImageWithLoader(imgSrc);
         _widgets.add(
           new Container(
             padding: const EdgeInsets.all(16.0),
