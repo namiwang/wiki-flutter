@@ -1,7 +1,10 @@
+import 'dart:typed_data';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+
+import './animated_gif.dart';
 
 // TODO checkout FutureBuilder
 // https://docs.flutter.io/flutter/widgets/FutureBuilder-class.html
@@ -18,7 +21,7 @@ class ImageWithLoader extends StatefulWidget {
 }
 
 class _ImageWithLoaderState extends State<ImageWithLoader> {
-  List imgBytes;
+  Uint8List imgBytes;
 
   @override
   void initState() {
@@ -34,6 +37,10 @@ class _ImageWithLoaderState extends State<ImageWithLoader> {
         child: const CircularProgressIndicator(),
         alignment: FractionalOffset.center,
       );
+    }
+
+    if ( widget.imgSrc.endsWith('.gif') ) {
+      return new AnimatedGif(imgBytes);
     } else {
       return new Image.memory(imgBytes);
     }
