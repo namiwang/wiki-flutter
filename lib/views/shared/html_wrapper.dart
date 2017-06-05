@@ -13,7 +13,7 @@ class _HtmlParser {
   List<TextSpan> _currentTextSpans = [];
 
   Widget parse () {
-    print('HtmlParser parsing: ' + htmlStr);
+    // print('HtmlParser parsing: ' + htmlStr);
 
     // init
     _widgets = [];
@@ -76,31 +76,80 @@ class _HtmlParser {
       case 'p':
       case 'div':
       case 'body':
-        for (var subNode in element.nodes) {
-          _parseNode(subNode);
-        }
+        // traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
 
         _tryCloseCurrentTextSpan();
 
         return;
+      case 'figure': // TODO
+        _tryCloseCurrentTextSpan();
+
+        // traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
+
+        return;
+      // TODO fig caption
       case 'img':
         _tryCloseCurrentTextSpan();
 
-        // TODO PRIMARY OBJECT
-        _currentTextSpans.add(new TextSpan(text: '<IMG> PLACEHOLDER'));
+        // TODO
+        // - with placeholder
+        // - click to show a fullscreen image
+        // - support animated gif
+
+        final String imgSrc = 'https:' + element.attributes['src'];
+        final img = new Image.network(imgSrc, fit: BoxFit.contain);
+        _widgets.add(
+          new Container(
+            padding: const EdgeInsets.all(16.0),
+            alignment: FractionalOffset.center,
+            child: img
+          )
+        );
 
         return;
       case 'table':
         _tryCloseCurrentTextSpan();
 
         // TODO PRIMARY OBJECT
-        _currentTextSpans.add(new TextSpan(text: '<TABLE> PLACEHOLDER'));
+        _widgets.add(
+          new Container(
+            padding: const EdgeInsets.all(16.0),
+            alignment: FractionalOffset.center,
+            child: const Text('<TABLE> placeholder')
+          )
+        );
+
+        return;
+      case 'span':
+      case 'i':
+      case 'strong':
+        // TODO PRIMARY OBJECT
+        // TODO style
+        _currentTextSpans.add(new TextSpan(text: element.text));
+
+        return;
+      case 'a':
+        // TODO PRIMARY OBJECT
+
+        // 1. target is wiki entity
+        // 2. target is wiki file
+        _currentTextSpans.add(new TextSpan(text: element.text));
+
+        // still traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
 
         return;
       default:
-        // TODO PRIMARY OBJECT
-        // as i, b, span, a, etc
+        print('=== MET UNSUPPORTED TAG: ${element.localName}');
+
+        // still traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
+
         _currentTextSpans.add(new TextSpan(text: element.text));
+
+        return;
     }
   }
 

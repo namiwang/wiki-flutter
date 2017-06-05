@@ -1,9 +1,13 @@
 # v0
 
+- to read
+  - https://en.wikipedia.org/wiki/Wikipedia:Naming_conventions_(technical_restrictions)
+
 - entity content
   - sections
   - image
     - caption
+    - animated GIF
   - table
   - lists
   - categories

@@ -17,13 +17,14 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../shared/html_wrapper.dart';
-
+import './shared/drawer.dart';
 import './sections/show.dart';
 
 class EntitiesShow extends StatefulWidget {
-  EntitiesShow({Key key, this.title}) : super(key: key);
-
+  final Map entity;
   final String title;
+
+  EntitiesShow({Key key, this.entity, this.title}) : super(key: key);
 
   @override
   _EntitiesShowState createState() => new _EntitiesShowState();
@@ -36,11 +37,16 @@ class _EntitiesShowState extends State<EntitiesShow> {
   void initState() {
     super.initState();
 
-    _fetchEntity().then( (fetchedEntity) {
-      setState((){
-        this.entity = fetchedEntity;
+    // prefer passed-in existing entity than fetching via title
+    if ( widget.entity != null ) {
+      setState((){ this.entity = widget.entity; });
+    } else {
+      _fetchEntity().then( (fetchedEntity) {
+        setState((){
+          this.entity = fetchedEntity;
+        });
       });
-    });
+    }
   }
 
   @override
@@ -58,6 +64,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
                            );
 
     return new Scaffold(
+      drawer: new EntitiesShowDrawer(entity: entity, currentSectionId: 0),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(
@@ -65,7 +72,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
             floating: true,
             snap: true,
             flexibleSpace: new FlexibleSpaceBar(
-              title: new Text(widget.title),
+              title: _buildTitle(),
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
@@ -78,6 +85,18 @@ class _EntitiesShowState extends State<EntitiesShow> {
         ]
       ),
     );
+  }
+
+  Widget _buildTitle() {
+    return
+      ( entity != null ) ? (
+        // TODO not that elegant, need more spec
+        // TODO maybe more tags (like span) in title?
+        // TODO maybe just use the htmlWrapper and set a theme
+        new Text((entity['lead']['displaytitle'] as String).replaceAll('<i>', '').replaceAll('</i>', ''))
+      ) : (
+        new Text(widget.title)
+      );
   }
 
   Future<Map> _fetchEntity() async {

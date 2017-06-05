@@ -4,7 +4,7 @@
 //   - or use the cover image from parent entity ?
 
 // TODO
-// outline
+  // DRAWER
 
 import 'package:flutter/material.dart';
 
