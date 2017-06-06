@@ -17,8 +17,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../shared/html_wrapper.dart';
+import './shared/section_outline_tiles.dart';
 import './shared/drawer.dart';
-import './sections/show.dart';
 
 class EntitiesShow extends StatefulWidget {
   final Map entity;
@@ -70,7 +70,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
           new SliverAppBar(
             expandedHeight: 256.0,
             floating: true,
-            snap: true,
+            // snap: true,
             flexibleSpace: new FlexibleSpaceBar(
               title: _buildTitle(),
               background: new Stack(
@@ -145,44 +145,14 @@ class _EntitiesShowState extends State<EntitiesShow> {
     widgetsList.add(const Divider());
 
     // remaining sections list
-    widgetsList.addAll(_remainingSectionTiles());
+    widgetsList.addAll(_remainingSectionsOutline());
 
     return widgetsList;
   }
 
-  List<Widget> _remainingSectionTiles () {
+  List<Widget> _remainingSectionsOutline () {
     if (entity['lead']['sections'].length < 1) { return []; }
 
-    List tiles = [];
-
-    for (var section in entity['remaining']['sections']) {
-      final tile = new ListTile(
-        title:
-          new Row(
-            children:
-              new List<Widget>
-                .filled( section['toclevel'], new Icon(Icons.chevron_right), growable: true )
-                ..add(
-                  new Expanded(
-                    child: new HtmlWrapper(htmlStr: section['line'])
-                  )
-                )
-          ),
-        onTap: (){
-          Navigator.of(context).push(
-            new MaterialPageRoute<Null>(
-              builder: (BuildContext context) {
-                return new EntitiesSectionsShow(entity: entity, sectionId: section['id']);
-              }
-            )
-          );
-        },
-      );
-
-      tiles.add(tile);
-      tiles.add(const Divider());
-    }
-
-    return tiles;
+    return sectionOutlineTiles(entity, rootSectionId: 0);
   }
 }

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../shared/section_list_tile.dart';
+import './section_outline_tiles.dart';
 
 class EntitiesShowDrawer extends StatelessWidget {
   final Map entity;
-  final int currentSectionId;
+  final int currentSectionId; // may be 0, for the main(lead) section
 
   EntitiesShowDrawer({ Key key, this.entity, this.currentSectionId }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    assert(entity != null);
-    assert(currentSectionId != null); // TODO maybe default to 0?
-
     List<Widget> widgets = [];
 
     // header
@@ -29,25 +26,21 @@ class EntitiesShowDrawer extends StatelessWidget {
     widgets.add( const Divider() );
 
     // sections outline
-    widgets.add( const Text('sections outline') ); // TODO style
-    widgets.addAll(_sectionsOutline(context));
+    if (entity != null && ( entity['lead']['sections'] as List ).length > 1 ){
+      widgets.add(
+        const ListTile(
+          leading: const Icon(Icons.list),
+          title: const Text('sections outline'),
+        )
+      );
+      widgets.addAll(sectionOutlineTiles(entity, rootSectionId: 0, selectedSectionId: currentSectionId, showMainSection: true));
+    }
 
     return new Drawer(
       child: new ListView(
         children: widgets
       )
     );
-  }
-
-  List<Widget> _sectionsOutline(BuildContext context) {
-    List<Widget> tiles = [];
-
-    for (Map section in ( entity['lead']['sections'] as List ) ) {
-      tiles.add(new SectionListTile(entity, section['id']));
-      // TODO selected
-    }
-
-    return tiles;
   }
 
 }

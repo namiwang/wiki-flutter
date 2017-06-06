@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 import '../../shared/html_wrapper.dart';
 
+import '../shared/drawer.dart';
+import '../shared/section_outline_tiles.dart';
+
 class EntitiesSectionsShow extends StatelessWidget {
   final Map entity;
   final int sectionId;
@@ -21,14 +24,6 @@ class EntitiesSectionsShow extends StatelessWidget {
     // section content
     Map section = entity['remaining']['sections'][sectionId - 1];
 
-    // nested sections list
-    List<Map> nestedSections = [];
-    for (var cursorSectionId = sectionId + 1 ; cursorSectionId < (entity['lead']['sections'] as List).length ; cursorSectionId++ ) {
-      final Map cursorSection = entity['remaining']['sections'][cursorSectionId - 1];
-      if ( cursorSection['toclevel'] <= section['toclevel'] ) { break; }
-      nestedSections.add(cursorSection);
-    }
-
     // build content widgets
     List<Widget> contentWidgets = [];
 
@@ -36,15 +31,17 @@ class EntitiesSectionsShow extends StatelessWidget {
       new HtmlWrapper(htmlStr: section['text'])
     );
 
-    contentWidgets.addAll(_nestedSectionTiles(context, nestedSections));
+    contentWidgets.add(const Divider());
+    contentWidgets.addAll(sectionOutlineTiles(entity, rootSectionId: sectionId));
 
     return new Scaffold(
+      drawer: new EntitiesShowDrawer(entity: entity, currentSectionId: sectionId),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(
             expandedHeight: 256.0,
             floating: true,
-            snap: true,
+            // snap: true,
             flexibleSpace: new FlexibleSpaceBar(
               title: new Text(section['line']),
               background: new Stack(
@@ -61,39 +58,5 @@ class EntitiesSectionsShow extends StatelessWidget {
         ]
       )
     );
-  }
-
-  List<Widget> _nestedSectionTiles (BuildContext context, List<Map> sections) {
-    List<Widget> tiles = [];
-
-    for (var section in sections) {
-      final tile = new ListTile(
-        title:
-          new Row(
-            children:
-              new List<Widget>
-                .filled( section['toclevel'], new Icon(Icons.chevron_right), growable: true )
-                ..add(
-                  new Expanded(
-                    child: new HtmlWrapper(htmlStr: section['line'])
-                  )
-                )
-          ),
-        onTap: (){
-          Navigator.of(context).push(
-            new MaterialPageRoute<Null>(
-              builder: (BuildContext context) {
-                return new EntitiesSectionsShow(entity: entity, sectionId: section['id']);
-              }
-            )
-          );
-        },
-      );
-
-      tiles.add(tile);
-      tiles.add(const Divider());
-    }
-
-    return tiles;
   }
 }
