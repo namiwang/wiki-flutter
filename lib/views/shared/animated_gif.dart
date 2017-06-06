@@ -1,4 +1,6 @@
 // TODO
+// - BUG firstFrame not showing
+// - FREEZING
 // - make this a flutter plugin
 // - use the platform
 //   - android.graphics.Movie
@@ -25,25 +27,36 @@ class AnimatedGif extends StatefulWidget {
 }
 
 class _AnimatedGifState extends State<AnimatedGif> {
-  List<Uint8List> _frames;
+  List<Image> _frames = [];
   int currentFrameIndex = 0;
 
   @override
   void initState() {
     super.initState();
 
-    _frames = image.decodeGifAnimation(widget.imgBytes).frames.map((image.Image frame){return image.encodeGif(frame);}).toList();
+    _frames = [ new Image.memory( widget.imgBytes ) ];
 
-    if (_frames.length > 1) {
-      new Timer.periodic(const Duration(milliseconds: 1000), (Timer timer){
-        _updateFrame();
-      });
-    }
+    // TODO BUGGY
+    // Timer.run(_play);
   }
 
   @override
   Image build(BuildContext context) {
-    return new Image.memory(_frames[currentFrameIndex], gaplessPlayback: true);
+    return _frames[currentFrameIndex];
+  }
+
+  void _play() {
+    _extractFrames().then((List frames){
+      _frames = frames;
+
+      new Timer.periodic(const Duration(seconds: 1), (Timer timer){_updateFrame();});
+    });
+  }
+
+  Future<List<Image>> _extractFrames() async {
+    return image.decodeGifAnimation(widget.imgBytes).frames.map((image.Image frame){
+      return new Image.memory(image.encodeGif(frame), gaplessPlayback: true);
+    }).toList();
   }
 
   void _updateFrame() {
