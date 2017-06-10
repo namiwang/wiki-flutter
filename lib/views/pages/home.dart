@@ -35,7 +35,7 @@ class PagesHome extends StatelessWidget {
   }
 
   List<Widget> _entitiesList(BuildContext context) {
-    final titles = ['Doraemon', 'European Union'];
+    final titles = ['Doraemon', 'European Union', 'Serious game'];
 
     return titles.map((t){
       return new ListTile(

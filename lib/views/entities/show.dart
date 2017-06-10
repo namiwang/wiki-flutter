@@ -22,7 +22,7 @@ import './shared/drawer.dart';
 
 class EntitiesShow extends StatefulWidget {
   final Map entity;
-  final String title;
+  final String title; // TODO TO-REFINE, actually this is the encoded_title
 
   EntitiesShow({Key key, this.entity, this.title}) : super(key: key);
 
@@ -100,14 +100,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
   }
 
   Future<Map> _fetchEntity() async {
-    String encodeTitle(String title) {
-      return title.replaceAll(' ', '_');
-    }
-
-    // TODO use encodedTitle
-    final String encodedTitle = encodeTitle(widget.title);
-
-    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/$encodedTitle";
+    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${widget.title}";
 
     final Map entity = JSON.decode(await http.read(url));
 
@@ -115,7 +108,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
   }
 
   Widget _buildCoverImg() {
-    if (entity != null && entity['lead']['image'] != Null ) {
+    if (entity != null && entity['lead']['image'] != null ) {
       // TODO multiple image urls
       final imageUrl = 'https:' + entity['lead']['image']['urls'][entity['lead']['image']['urls'].keys.last];
       return new Image.network(

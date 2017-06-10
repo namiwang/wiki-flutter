@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:html/parser.dart' as html show parse;
 import 'package:html/dom.dart' as html;
+import 'package:url_launcher/url_launcher.dart';
 
 import './image_with_loader.dart';
 
@@ -12,14 +13,11 @@ class _HtmlParser {
   _HtmlParser({this.htmlStr, this.textTheme});
 
   List<Widget> _widgets = [];
-  List<TextSpan> _currentTextSpans = [];
+  // List<TextSpan> _currentTextSpans = [];
+  List<Widget> _currentWrapChildren = [];
 
   Widget parse () {
     // print('HtmlParser parsing: ' + htmlStr);
-
-    // init
-    _widgets = [];
-    _currentTextSpans = [];
 
     // html to dom
     final html.Node body = html.parse(htmlStr).body;
@@ -28,10 +26,7 @@ class _HtmlParser {
     _parseNode(body);
     _tryCloseCurrentTextSpan();
 
-    // print('--- parsed');
-    // print('widgets: ' + _widgets.length.toString());
-    // print((_widgets.first as RichText).text);
-    // print((_widgets.first as RichText).text.toPlainText());
+    // _debugPrintWidgets();
 
     return new Wrap(children: _widgets);
   }
@@ -63,7 +58,10 @@ class _HtmlParser {
         _parseElement(node as html.Element);
         return;
       case html.Node.TEXT_NODE:
-        _currentTextSpans.add(new TextSpan(text: node.text));
+        // _currentTextSpans.add(new TextSpan(text: node.text));
+
+        _appendToCurrentWrap(new Text(node.text));
+
         return;
       default:
         break;
@@ -128,19 +126,34 @@ class _HtmlParser {
       case 'i':
       case 'strong':
         // TODO PRIMARY OBJECT
-        // TODO style
-        _currentTextSpans.add(new TextSpan(text: element.text));
+        // TODO NEED IMPROVEMENT maybe a _currentTextStylesStack for nesting stacks
+
+        // still traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
 
         return;
       case 'a':
         // TODO PRIMARY OBJECT
+        // TODO NEED IMPROVEMENT
+
+        // print(element.attributes['href']);
+
+        if ( element.hasContent() && ( element.nodes.length == 1 ) && ( element.firstChild.nodeType == html.Node.TEXT_NODE ) ) {
+          // if contains only one text node
+
+          final text = element.text;
+          final href = element.attributes['href'];
+
+          _appendToCurrentWrap(new _TextLink(text: text, href: href));
+        } else {
+          // still traverse down the tree
+          for (var subNode in element.nodes) { _parseNode(subNode); }
+        }
 
         // 1. target is wiki entity
         // 2. target is wiki file
-        _currentTextSpans.add(new TextSpan(text: element.text));
-
-        // still traverse down the tree
-        for (var subNode in element.nodes) { _parseNode(subNode); }
+  
+        // <a href=\"/wiki/Political_union\" title=\"Political union\">political</a> and <a href=\"/wiki/Economic_union\" title=\"Economic union\">economic union</a>
 
         return;
       default:
@@ -149,25 +162,42 @@ class _HtmlParser {
         // still traverse down the tree
         for (var subNode in element.nodes) { _parseNode(subNode); }
 
-        _currentTextSpans.add(new TextSpan(text: element.text));
-
         return;
     }
   }
 
   void _tryCloseCurrentTextSpan() {
-    if ( _currentTextSpans.length > 0 ) {
-      final richText = new RichText(
-        text: new TextSpan(
-          children: _currentTextSpans,
-          style: textTheme.body1
-        )
-      );
+    // print('=== closingCurrentWrap ===' + _currentWrapChildren.isEmpty.toString());
+    if (_currentWrapChildren.isEmpty) { return; }
 
-      _widgets.add(richText);
-      _currentTextSpans = [];
-    }
+    _widgets.add(new Wrap(children: new List.from(_currentWrapChildren)));
+
+    _currentWrapChildren.clear();
   }
+
+  void _appendToCurrentWrap(Widget widget){
+    // print('=== appending to _currentWrap: ' + widget.toString());
+
+    // TODO BUG if the widget to be added, and the current last widget, are both Text, then we should append the text instead of widgets.
+
+    _currentWrapChildren.add(widget);
+  }
+
+  // void _debugPrintWidgets() {
+  //   List<String> lines = [' === *** current widgets *** ==='];
+
+  //   for (var w in _widgets) {
+  //     lines.add(w.toString());
+  //     if (w.runtimeType == Wrap){
+  //       lines.add((w as Wrap).children.toString());
+  //     }
+  //   }
+
+  //   lines.add(' === *** current widges end *** ===');
+
+  //   print(lines.join('\n'));
+  // }
+
 }
 
 class HtmlWrapper extends StatelessWidget {
@@ -178,5 +208,47 @@ class HtmlWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (new _HtmlParser(htmlStr: htmlStr, textTheme: Theme.of(context).textTheme)).parse();
+  }
+}
+
+class _TextLink extends StatelessWidget {
+  // static const style = const TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
+  static const style = const TextStyle(color: Colors.blue);
+
+  final String text;
+  final String href;
+
+  _TextLink({this.text, this.href});
+
+  @override
+  Widget build(BuildContext context) {
+    // NOTE added following https://docs.flutter.io/flutter/material/InkWell-class.html
+    assert(debugCheckHasMaterial(context));
+
+    // TODO
+    if ( href.startsWith('#cite_note-') ) {
+      print('=== TODO handle a cite_note');
+
+      return new InkWell(
+        child: new Text(text, style: style),
+        onTap: (){ launch(href); },
+      );
+    }
+
+    // TODO
+    if ( href.startsWith('/wiki/') ) {
+      String realHref = this.href.replaceFirst('/wiki/', 'https://en.m.wikipedia.org/wiki/');
+      return new InkWell(
+        child: new Text(text, style: style),
+        onTap: (){ launch(realHref); },
+      );
+    }
+
+    // default external link
+    return new InkWell(
+      child: new Text(text, style: style),
+      onTap: (){ launch(this.href); },
+    );
+
   }
 }

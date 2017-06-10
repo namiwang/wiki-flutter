@@ -11,11 +11,15 @@
   - table
   - lists
   - categories
-  - external links
   - ciatation/ref via snackbar
   - issues, hatnotes
     - main article
     - see also
+
+- inline html wrapper
+
+- external links
+  - handle link with section anchor
 
 - elegant nested sections
   - maybe outline in drawer
