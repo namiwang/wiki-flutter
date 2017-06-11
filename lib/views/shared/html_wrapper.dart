@@ -13,7 +13,6 @@ class _HtmlParser {
   _HtmlParser({this.htmlStr, this.textTheme});
 
   List<Widget> _widgets = [];
-  // List<TextSpan> _currentTextSpans = [];
   List<Widget> _currentWrapChildren = [];
 
   Widget parse () {
@@ -213,7 +212,9 @@ class HtmlWrapper extends StatelessWidget {
 
 class _TextLink extends StatelessWidget {
   // static const style = const TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
-  static const style = const TextStyle(color: Colors.blue);
+  static const linkStyle = const TextStyle(color: Colors.blue);
+  static final suffixIconString = new String.fromCharCode(Icons.open_in_browser.codePoint);
+  static final suffixIconStyle = linkStyle.apply(fontFamily: 'MaterialIcons');
 
   final String text;
   final String href;
@@ -230,24 +231,23 @@ class _TextLink extends StatelessWidget {
       print('=== TODO handle a cite_note');
 
       return new InkWell(
-        child: new Text(text, style: style),
+        child: new Text(text, style: linkStyle),
         onTap: (){ launch(href); },
       );
     }
 
-    // TODO
-    if ( href.startsWith('/wiki/') ) {
-      String realHref = this.href.replaceFirst('/wiki/', 'https://en.m.wikipedia.org/wiki/');
-      return new InkWell(
-        child: new Text(text, style: style),
-        onTap: (){ launch(realHref); },
-      );
-    }
+    String realHref = this.href;
+    // TODO should be internal
+    if ( href.startsWith('/wiki/') ) { String realHref = 'https://en.m.wikipedia.org' + this.href; }
 
-    // default external link
     return new InkWell(
-      child: new Text(text, style: style),
-      onTap: (){ launch(this.href); },
+      child: new RichText(
+        text: new TextSpan(children: [
+          new TextSpan(text: text),
+          new TextSpan(text: suffixIconString, style: suffixIconStyle),
+        ], style: linkStyle),
+      ),
+      onTap: (){ launch(realHref); },
     );
 
   }

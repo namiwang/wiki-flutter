@@ -35,6 +35,8 @@
 - CODING
   - share utils and theme
 
+- Raleway seems like a good font https://github.com/impallari/Raleway
+
 # later MUST HAVE
 
 - search https://github.com/flutter/flutter/issues/9783

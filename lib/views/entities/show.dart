@@ -109,7 +109,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   Widget _buildCoverImg() {
     if (entity != null && entity['lead']['image'] != null ) {
-      // TODO multiple image urls
+      // TODO handle multiple image urls
       final imageUrl = 'https:' + entity['lead']['image']['urls'][entity['lead']['image']['urls'].keys.last];
       return new Image.network(
         imageUrl,
