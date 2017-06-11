@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 
 import 'package:html/parser.dart' as html show parse;
 import 'package:html/dom.dart' as html;
@@ -13,7 +14,7 @@ class _HtmlParser {
   _HtmlParser({this.htmlStr, this.textTheme});
 
   List<Widget> _widgets = [];
-  List<Widget> _currentWrapChildren = [];
+  List<TextSpan> _currentTextSpans = [];
 
   Widget parse () {
     // print('HtmlParser parsing: ' + htmlStr);
@@ -30,24 +31,6 @@ class _HtmlParser {
     return new Wrap(children: _widgets);
   }
 
-  // mechanism
-  // there're several kinds/levels of nodes,
-
-  // for p, div, etc.
-  // parse children nodes
-
-  // for img, table, etc
-  // 0. if currentTextSpans is not empty, close it, wrap it with a RichText, and append it into outerWrap
-  // 1. append self into outerWrap
-
-  // i, b, a, span
-  // append self as TextSpan into currentTextSpan, or outerWrap, if currentWrap is null
-
-  // textnode
-  // append into currentWrap, or outerWrap, if currentWrap is null
-
-  // TODO lists like <li>
-
   void _parseNode(html.Node node) {
     // print('--- _parseNode');
     // print(node.toString());
@@ -57,10 +40,7 @@ class _HtmlParser {
         _parseElement(node as html.Element);
         return;
       case html.Node.TEXT_NODE:
-        // _currentTextSpans.add(new TextSpan(text: node.text));
-
-        _appendToCurrentWrap(new Text(node.text));
-
+        _appendToCurrentTextSpans(node.text);
         return;
       default:
         break;
@@ -143,16 +123,11 @@ class _HtmlParser {
           final text = element.text;
           final href = element.attributes['href'];
 
-          _appendToCurrentWrap(new _TextLink(text: text, href: href));
+          _appendToCurrentTextSpans(new _TextLink(text: text, href: href));
         } else {
           // still traverse down the tree
           for (var subNode in element.nodes) { _parseNode(subNode); }
         }
-
-        // 1. target is wiki entity
-        // 2. target is wiki file
-  
-        // <a href=\"/wiki/Political_union\" title=\"Political union\">political</a> and <a href=\"/wiki/Economic_union\" title=\"Economic union\">economic union</a>
 
         return;
       default:
@@ -166,21 +141,44 @@ class _HtmlParser {
   }
 
   void _tryCloseCurrentTextSpan() {
-    // print('=== closingCurrentWrap ===' + _currentWrapChildren.isEmpty.toString());
-    if (_currentWrapChildren.isEmpty) { return; }
+    print('=== closingCurrentTextSpan ===' + _currentTextSpans.length.toString());
 
-    _widgets.add(new Wrap(children: new List.from(_currentWrapChildren)));
+    if (_currentTextSpans.isEmpty) { return; }
 
-    _currentWrapChildren.clear();
+    _widgets.add(new RichText(
+      text: new TextSpan(
+        style: textTheme.body1,
+        children: new List.from(_currentTextSpans)
+      )
+    ));
+
+    _currentTextSpans.clear();
   }
 
-  void _appendToCurrentWrap(Widget widget){
-    // print('=== appending to _currentWrap: ' + widget.toString());
+  void _appendToCurrentTextSpans(dynamic textOrLink){
+    print('=== appending to _currentTextSpan: ' + textOrLink.toString());
 
-    // TODO BUG if the widget to be added, and the current last widget, are both Text, then we should append the text instead of widgets.
-
-    _currentWrapChildren.add(widget);
+    switch (textOrLink.runtimeType) {
+      case String:
+        // NOTE if the widget to be added, and the current last widget, are both Text, then we should append the text instead of widgets.
+        if (_currentTextSpans.length > 0 && _currentTextSpans.last.runtimeType == Text) {
+          final String originalText = _currentTextSpans.last.text;
+          final String mergedText = originalText + textOrLink;
+          _currentTextSpans[_currentTextSpans.length - 1] = new TextSpan(text: mergedText);
+        } else {
+          _currentTextSpans.add(new TextSpan(text: textOrLink));
+        }
+        break;
+      case _TextLink:
+        _currentTextSpans.add((textOrLink as _TextLink).textSpan);
+        break;
+      default:
+        throw "dk how to append";
+    }
   }
+
+  // TODO
+  // void _appendToCurrentWidgets(Widget w) {}
 
   // void _debugPrintWidgets() {
   //   List<String> lines = [' === *** current widgets *** ==='];
@@ -210,7 +208,7 @@ class HtmlWrapper extends StatelessWidget {
   }
 }
 
-class _TextLink extends StatelessWidget {
+class _TextLink {
   // static const style = const TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
   static const linkStyle = const TextStyle(color: Colors.blue);
   static final suffixIconString = new String.fromCharCode(Icons.open_in_browser.codePoint);
@@ -218,37 +216,45 @@ class _TextLink extends StatelessWidget {
 
   final String text;
   final String href;
+  TextSpan textSpan;
 
-  _TextLink({this.text, this.href});
-
-  @override
-  Widget build(BuildContext context) {
-    // NOTE added following https://docs.flutter.io/flutter/material/InkWell-class.html
-    assert(debugCheckHasMaterial(context));
-
+  // TODO REFINE
+  _TextLink({this.text, this.href}){
     // TODO
-    if ( href.startsWith('#cite_note-') ) {
-      print('=== TODO handle a cite_note');
+    // if ( href.startsWith('#cite_note-') ) {
+    //   print('=== TODO handle a cite_note');
 
-      return new InkWell(
-        child: new Text(text, style: linkStyle),
-        onTap: (){ launch(href); },
-      );
-    }
+    //   return new InkWell(
+    //     child: new Text(text, style: linkStyle),
+    //     onTap: (){ launch(href); },
+    //   );
+    // }
 
     String realHref = this.href;
     // TODO should be internal
+    // <a href=\"/wiki/Political_union\" title=\"Political union\">political</a> and <a href=\"/wiki/Economic_union\" title=\"Economic union\">economic union</a>
     if ( href.startsWith('/wiki/') ) { String realHref = 'https://en.m.wikipedia.org' + this.href; }
+    // 1. target is wiki entity
+    // 2. target is wiki file
 
-    return new InkWell(
-      child: new RichText(
-        text: new TextSpan(children: [
-          new TextSpan(text: text),
-          new TextSpan(text: suffixIconString, style: suffixIconStyle),
-        ], style: linkStyle),
-      ),
-      onTap: (){ launch(realHref); },
-    );
+    final recognizer = new TapGestureRecognizer();
+    recognizer.onTap = (){ launch(realHref); };
 
+    // TODO BUG gesture not working
+    this.textSpan = new TextSpan(children: [
+      new TextSpan(text: text),
+      new TextSpan(text: suffixIconString, style: suffixIconStyle),
+    ], style: linkStyle, recognizer: recognizer);
+
+    // TODO cleanup
+    // return new InkWell(
+    //   child: new RichText(
+    //     text: new TextSpan(children: [
+    //       new TextSpan(text: text),
+    //       new TextSpan(text: suffixIconString, style: suffixIconStyle),
+    //     ], style: linkStyle),
+    //   ),
+    //   onTap: (){ launch(realHref); },
+    // );
   }
 }

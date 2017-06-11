@@ -4,22 +4,25 @@
   - https://en.wikipedia.org/wiki/Wikipedia:Naming_conventions_(technical_restrictions)
 
 - entity content
-  - sections
-  - image
-    - caption
-    - animated GIF
-  - table
-  - lists
+  - html parsing
+    - image
+      - caption
+      - animated GIF
+    - table
+    - lists
   - categories
-  - ciatation/ref via snackbar
   - issues, hatnotes
     - main article
     - see also
 
 - inline html wrapper
 
-- external links
-  - handle link with section anchor
+- links
+  - BUG ONTAP NOT WORKING
+  - internal
+    - handle link with anchor as section
+    - ciatation/ref via snackbar
+  - external
 
 - elegant nested sections
   - maybe outline in drawer
