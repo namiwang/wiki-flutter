@@ -6,6 +6,8 @@ if ENV['FLUTTER_FRAMEWORK_DIR'] == nil
 end
 
 target 'Runner' do
+  use_frameworks!
+
   # Pods for Runner
 
   # Flutter Pods
