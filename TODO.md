@@ -42,8 +42,6 @@
 
 - search https://github.com/flutter/flutter/issues/9783
 - delegate home page
-- placeholder for image inside appbar
-- internal link
 - title text in appbar above background image may be indistinguishable with the image, say both are white
 - multiple languages
 
