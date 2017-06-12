@@ -43,7 +43,7 @@ class EntitiesSectionsShow extends StatelessWidget {
             floating: true,
             // snap: true,
             flexibleSpace: new FlexibleSpaceBar(
-              title: new Text(section['line']),
+              title: new Text(parseInlineHtml(section['line'])),
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[

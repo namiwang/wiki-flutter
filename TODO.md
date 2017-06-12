@@ -15,8 +15,6 @@
     - main article
     - see also
 
-- inline html wrapper
-
 - links
   - BUG ONTAP NOT WORKING
   - internal

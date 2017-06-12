@@ -48,7 +48,7 @@ class _SectionListTile extends StatelessWidget {
     final Widget titleContent =
       ( sectionId == 0 ) ?
       ( new Expanded( child: new Text('Main Section') ) ): // USE title
-      ( new Expanded( child: new HtmlWrapper( htmlStr: section['line'] ) ) );
+      ( new Expanded( child: new Text( parseInlineHtml(section['line']) ) ) );
     final List<Widget> titleRowChildren = []
       ..addAll(prefixIcons)
       ..add(titleContent);

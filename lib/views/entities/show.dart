@@ -93,7 +93,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
         // TODO not that elegant, need more spec
         // TODO maybe more tags (like span) in title?
         // TODO maybe just use the htmlWrapper and set a theme
-        new Text((entity['lead']['displaytitle'] as String).replaceAll('<i>', '').replaceAll('</i>', ''))
+        new Text( parseInlineHtml(entity['lead']['displaytitle'] as String) )
       ) : (
         new Text(widget.title)
       );
