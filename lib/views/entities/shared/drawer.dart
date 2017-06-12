@@ -13,7 +13,8 @@ class EntitiesShowDrawer extends StatelessWidget {
     List<Widget> widgets = [];
 
     // header
-    widgets.add(const DrawerHeader(child: const Center(child: const Text('Wiki Flutter')))); // TODO image
+    // TODO style, maybe use a transparent-background wiki-flutter logo img
+    widgets.add(new DrawerHeader(child: new Center(child: new Image.asset('assets/images/drawer_header.jpg'))));
 
     // home
     // TODO ontap

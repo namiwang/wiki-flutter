@@ -117,7 +117,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
         fit: BoxFit.cover,
       );
     } else {
-      return new Image.network('http://via.placeholder.com/256x256?text=placeholder', fit: BoxFit.cover);
+      return new Image.asset('assets/images/placeholder.jpg', fit: BoxFit.cover);
     }
 
   }

@@ -17,8 +17,8 @@ class PagesHome extends StatelessWidget {
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  new Image.network(
-                    "http://placehold.it/256x256", // TODO DUMMY
+                  new Image.asset(
+                    "assets/images/home_header.jpg",
                     fit: BoxFit.cover,
                     height: 256.0
                   ),
