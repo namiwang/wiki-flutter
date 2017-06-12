@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-import './animated_gif.dart';
+import 'package:flutter_animated/animated_gif.dart';
 
 // TODO checkout FutureBuilder
 // https://docs.flutter.io/flutter/widgets/FutureBuilder-class.html
