@@ -49,6 +49,7 @@
 
 - random page
 - splash screen
+- about dialog
 
 - some cool stuff
   - cool floating vertical slider as scroller

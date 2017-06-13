@@ -47,7 +47,7 @@ class EntitiesSectionsShow extends StatelessWidget {
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  new Image.asset('assets/images/app_header.jpg', fit: BoxFit.cover)
+                  new Image.asset('assets/images/placeholder.jpg', fit: BoxFit.cover)
                 ]
               )
             ),

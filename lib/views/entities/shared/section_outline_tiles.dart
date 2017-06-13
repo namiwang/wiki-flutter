@@ -1,10 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../shared/html_wrapper.dart';
 import '../show.dart';
 import '../sections/show.dart';
-
-// TODO BUG selected is not applied since the contents are HtmlWrapper
 
 List<Widget> sectionOutlineTiles(Map entity, { rootSectionId: 0, selectedSectionId: null, showMainSection: false }) {
   List<Map> sections = [];
@@ -53,11 +53,11 @@ class _SectionListTile extends StatelessWidget {
       ..addAll(prefixIcons)
       ..add(titleContent);
 
-    return new ListTile(
+    final ListTile sectionTile = new ListTile(
       title: new Row( children: titleRowChildren ),
       // leading: const Text(''),
       dense: true,
-      selected: false,
+      selected: selected,
       onTap: (){
         // TODO HIGH PRIORITY, KINDA COMPLEX
         // if inside the drawer, should replace current route to close the drawer, I guess
@@ -71,5 +71,36 @@ class _SectionListTile extends StatelessWidget {
         );
       },
     );
+
+    return new _AnimatedSectionTile(sectionTile: sectionTile);
+  }
+}
+
+class _AnimatedSectionTile extends StatefulWidget {
+  final ListTile sectionTile;
+
+  const _AnimatedSectionTile({ Key key, this.sectionTile }) : super(key: key);
+
+  @override
+  _AnimatedSectionTileState createState() => new _AnimatedSectionTileState();
+}
+
+class _AnimatedSectionTileState extends State<_AnimatedSectionTile> {
+  double opacity = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Timer.run((){
+      setState((){
+        opacity = 1.0;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new AnimatedOpacity(child: widget.sectionTile, opacity: opacity, duration: const Duration(milliseconds: 300),);
   }
 }
