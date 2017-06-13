@@ -130,8 +130,10 @@ class _EntitiesShowState extends State<EntitiesShow> {
     // widgetsList.add(new Text(entity['lead']['displaytitle']));
 
     // description
-    widgetsList.add(new Text(entity['lead']['description'], style: Theme.of(context).textTheme.subhead));
-    widgetsList.add(const Divider());
+    if (entity['lead']['description'] != null) {
+      widgetsList.add(new Text(entity['lead']['description'], style: Theme.of(context).textTheme.subhead));
+      widgetsList.add(const Divider());
+    }
 
     // main section
     widgetsList.add(new HtmlWrapper(htmlStr: entity['lead']['sections'][0]['text']));

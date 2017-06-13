@@ -8,15 +8,16 @@ import 'package:url_launcher/url_launcher.dart';
 import './image_with_loader.dart';
 
 class _HtmlParser {
-  final String htmlStr;
+  final BuildContext context;
   final TextTheme textTheme;
 
-  _HtmlParser({this.htmlStr, this.textTheme});
+  _HtmlParser(this.context)
+    : textTheme = Theme.of(context).textTheme {}
 
   List<Widget> _widgets = [];
   List<TextSpan> _currentTextSpans = [];
 
-  Widget parse () {
+  Widget parse (String htmlStr) {
     // print('HtmlParser parsing: ' + htmlStr);
 
     // html to dom
@@ -123,7 +124,7 @@ class _HtmlParser {
           final text = element.text;
           final href = element.attributes['href'];
 
-          _appendToCurrentTextSpans(new _TextLink(text: text, href: href));
+          _appendToCurrentTextSpans(new _TextLink(context, text: text, href: href));
         } else {
           // still traverse down the tree
           for (var subNode in element.nodes) { _parseNode(subNode); }
@@ -204,58 +205,69 @@ class HtmlWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (new _HtmlParser(htmlStr: htmlStr, textTheme: Theme.of(context).textTheme)).parse();
+    return (new _HtmlParser(context)).parse(htmlStr);
   }
 }
 
+// NOTE removed suffixIcon due to vendor issue: https://github.com/flutter/flutter/issues/10623
 class _TextLink {
   // static const style = const TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
   static const linkStyle = const TextStyle(color: Colors.blue);
-  static final suffixIconString = new String.fromCharCode(Icons.open_in_browser.codePoint);
-  static final suffixIconStyle = linkStyle.apply(fontFamily: 'MaterialIcons');
+  // static final suffixIconString = new String.fromCharCode(Icons.open_in_browser.codePoint);
+  // static final suffixIconStyle = linkStyle.apply(fontFamily: 'MaterialIcons');
 
+  final BuildContext context;
   final String text;
   final String href;
   TextSpan textSpan;
 
   // TODO REFINE
-  _TextLink({this.text, this.href}){
-    // TODO
-    // if ( href.startsWith('#cite_note-') ) {
-    //   print('=== TODO handle a cite_note');
+  _TextLink(this.context, {this.text, this.href}){
+    // cite note
+    if ( href.startsWith('#cite_note-') ) {
+      this.textSpan = _textSpanForInternalCiteNote();
+      return;
+    }
 
-    //   return new InkWell(
-    //     child: new Text(text, style: linkStyle),
-    //     onTap: (){ launch(href); },
-    //   );
-    // }
-
-    String realHref = this.href;
-    // TODO should be internal
+    // internal link to another entity
     // <a href=\"/wiki/Political_union\" title=\"Political union\">political</a> and <a href=\"/wiki/Economic_union\" title=\"Economic union\">economic union</a>
-    if ( href.startsWith('/wiki/') ) { String realHref = 'https://en.m.wikipedia.org' + this.href; }
-    // 1. target is wiki entity
-    // 2. target is wiki file
+    if ( href.startsWith('/wiki/') ) {
+      final String targetEntityTiele = href.replaceAll('/wiki/', '');
+      this.textSpan = _textSpanForInternalEntityLink(targetEntityTiele);
+      return;
+    }
 
+    // default as an external link
+    this.textSpan = _textSpanForExternalLink();
+  }
+
+  TextSpan _textSpanForInternalEntityLink(String targetEntityTitle) {
     final recognizer = new TapGestureRecognizer();
-    recognizer.onTap = (){ launch(realHref); };
+    recognizer.onTap = (){
+      Navigator.pushNamed(context, "/entities/$targetEntityTitle");
+    };
 
-    // TODO BUG gesture not working
-    this.textSpan = new TextSpan(children: [
-      new TextSpan(text: text),
-      new TextSpan(text: suffixIconString, style: suffixIconStyle),
-    ], style: linkStyle, recognizer: recognizer);
+    return new TextSpan(
+      text: text,
+      style: linkStyle,
+      recognizer: recognizer
+    );
+  }
 
-    // TODO cleanup
-    // return new InkWell(
-    //   child: new RichText(
-    //     text: new TextSpan(children: [
-    //       new TextSpan(text: text),
-    //       new TextSpan(text: suffixIconString, style: suffixIconStyle),
-    //     ], style: linkStyle),
-    //   ),
-    //   onTap: (){ launch(realHref); },
-    // );
+  TextSpan _textSpanForInternalCiteNote() {
+    print('=== TODO handle a cite_note');
+    return new TextSpan(text: '<CITE NOTE PLACEHOLDER>', style: linkStyle);
+  }
+
+  TextSpan _textSpanForExternalLink() {
+    final recognizer = new TapGestureRecognizer();
+    recognizer.onTap = (){ launch(href); };
+
+    return new TextSpan(
+      text: text,
+      style: linkStyle,
+      recognizer: recognizer
+    );
   }
 }
 

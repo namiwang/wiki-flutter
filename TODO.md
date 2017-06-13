@@ -47,6 +47,8 @@
 
 # later MAYBE
 
+- bookmarking
+- visit history
 - random page
 - splash screen
 - about dialog
