@@ -38,20 +38,23 @@
 
 - Raleway seems like a good font https://github.com/impallari/Raleway
 
-# later MUST HAVE
+# LATER MUST HAVE
 
 - search https://github.com/flutter/flutter/issues/9783
 - delegate home page
 - title text in appbar above background image may be indistinguishable with the image, say both are white
 - multiple languages
 
-# later MAYBE
+# LATER SHOULD HAVE
 
 - bookmarking
 - visit history
 - random page
 - splash screen
 - about dialog
+- handle wiki://, or http://en.wikipedia... link
+
+# LATER MAYBE
 
 - some cool stuff
   - cool floating vertical slider as scroller

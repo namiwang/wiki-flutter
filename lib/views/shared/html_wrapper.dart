@@ -1,3 +1,5 @@
+// TODO should move out of 'views'
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
@@ -18,6 +20,7 @@ class _HtmlParser {
   List<TextSpan> _currentTextSpans = [];
 
   Widget parse (String htmlStr) {
+    print('*** parsing html...');
     // print('HtmlParser parsing: ' + htmlStr);
 
     // html to dom
@@ -142,7 +145,7 @@ class _HtmlParser {
   }
 
   void _tryCloseCurrentTextSpan() {
-    print('=== closingCurrentTextSpan ===' + _currentTextSpans.length.toString());
+    // print('=== closingCurrentTextSpan ===' + _currentTextSpans.length.toString());
 
     if (_currentTextSpans.isEmpty) { return; }
 
@@ -157,7 +160,7 @@ class _HtmlParser {
   }
 
   void _appendToCurrentTextSpans(dynamic textOrLink){
-    print('=== appending to _currentTextSpan: ' + textOrLink.toString());
+    // print('=== appending to _currentTextSpan: ' + textOrLink.toString());
 
     switch (textOrLink.runtimeType) {
       case String:
@@ -275,7 +278,7 @@ class _TextLink {
 // this is a quick, yet not elegant way to parse inline html
 // it just remove all expecting tags and return a string
 parseInlineHtml(String htmlStr) {
-  print('parsing inline html');
+  print('*** parsing inline html...');
 
   return htmlStr.replaceAll(new RegExp("<\/*(i|b|span)>"), '');
 }

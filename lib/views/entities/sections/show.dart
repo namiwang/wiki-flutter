@@ -10,32 +10,31 @@ import 'package:flutter/material.dart';
 
 import '../../shared/html_wrapper.dart';
 
+import '../../../models/entity.dart';
+
 import '../shared/drawer.dart';
 import '../shared/section_outline_tiles.dart';
 
 class EntitiesSectionsShow extends StatelessWidget {
-  final Map entity;
-  final int sectionId;
+  final Entity entity;
+  final Section section;
 
-  EntitiesSectionsShow({ Key key, this.entity, this.sectionId }) : super(key: key);
+  EntitiesSectionsShow({ Key key, this.entity, this.section }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // section content
-    Map section = entity['remaining']['sections'][sectionId - 1];
-
     // build content widgets
     List<Widget> contentWidgets = [];
 
     contentWidgets.add(
-      new HtmlWrapper(htmlStr: section['text'])
+      new HtmlWrapper(htmlStr: section.htmlText)
     );
 
     contentWidgets.add(const Divider());
-    contentWidgets.addAll(sectionOutlineTiles(entity, rootSectionId: sectionId));
+    contentWidgets.addAll(sectionOutlineTiles(entity, rootSectionId: section.id));
 
     return new Scaffold(
-      drawer: new EntitiesShowDrawer(entity: entity, currentSectionId: sectionId),
+      drawer: new EntitiesShowDrawer(entity: entity, currentSectionId: section.id),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(
@@ -43,7 +42,7 @@ class EntitiesSectionsShow extends StatelessWidget {
             floating: true,
             // snap: true,
             flexibleSpace: new FlexibleSpaceBar(
-              title: new Text(parseInlineHtml(section['line'])),
+              title: new Text(section.title),
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[

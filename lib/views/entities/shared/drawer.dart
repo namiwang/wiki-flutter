@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/entity.dart';
+
 import './section_outline_tiles.dart';
 
 class EntitiesShowDrawer extends StatelessWidget {
-  final Map entity;
-  final int currentSectionId; // may be 0, for the main(lead) section
+  final Entity entity;
+  final int currentSectionId;
 
   EntitiesShowDrawer({ Key key, this.entity, this.currentSectionId }) : super(key: key);
 
@@ -27,7 +29,7 @@ class EntitiesShowDrawer extends StatelessWidget {
     widgets.add( const Divider() );
 
     // sections outline
-    if (entity != null && ( entity['lead']['sections'] as List ).length > 1 ){
+    if (entity != null && entity.sections.length > 1){
       widgets.add(
         const ListTile(
           leading: const Icon(Icons.list),

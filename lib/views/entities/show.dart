@@ -16,13 +16,15 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
+import '../../models/entity.dart';
+
 import '../shared/html_wrapper.dart';
 import './shared/section_outline_tiles.dart';
 import './shared/drawer.dart';
 
 class EntitiesShow extends StatefulWidget {
-  final Map entity;
-  final String title; // TODO TO-REFINE, actually this is the encoded_title
+  final String title; // TODO TO-REFINE, actually this may be encoded title or not
+  final Entity entity;
 
   EntitiesShow({Key key, this.entity, this.title}) : super(key: key);
 
@@ -31,7 +33,7 @@ class EntitiesShow extends StatefulWidget {
 }
 
 class _EntitiesShowState extends State<EntitiesShow> {
-  Map entity;
+  Entity entity;
 
   @override
   void initState() {
@@ -41,9 +43,9 @@ class _EntitiesShowState extends State<EntitiesShow> {
     if ( widget.entity != null ) {
       setState((){ this.entity = widget.entity; });
     } else {
-      _fetchEntity().then( (fetchedEntity) {
+      _fetchEntity().then( (fetchedEntityMap) {
         setState((){
-          this.entity = fetchedEntity;
+          this.entity = new Entity(fetchedEntityMap);
         });
       });
     }
@@ -93,7 +95,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
         // TODO not that elegant, need more spec
         // TODO maybe more tags (like span) in title?
         // TODO maybe just use the htmlWrapper and set a theme
-        new Text( parseInlineHtml(entity['lead']['displaytitle'] as String) )
+        new Text(entity.displayTitle)
       ) : (
         new Text(widget.title)
       );
@@ -108,18 +110,12 @@ class _EntitiesShowState extends State<EntitiesShow> {
   }
 
   Widget _buildCoverImg() {
-    if (entity != null && entity['lead']['image'] != null ) {
-      // TODO handle multiple image urls
-      final imageUrl = 'https:' + entity['lead']['image']['urls'][entity['lead']['image']['urls'].keys.last];
-      return new Image.network(
-        imageUrl,
-        height: 256.0,
-        fit: BoxFit.cover,
-      );
+    if (entity != null && entity.coverImgSrc != null) {
+      return new Image.network(entity.coverImgSrc, fit: BoxFit.cover);
     } else {
+      // TODO shared assets helper
       return new Image.asset('assets/images/placeholder.jpg', fit: BoxFit.cover);
     }
-
   }
 
   List<Widget> _contentsList(BuildContext context) {
@@ -130,13 +126,13 @@ class _EntitiesShowState extends State<EntitiesShow> {
     // widgetsList.add(new Text(entity['lead']['displaytitle']));
 
     // description
-    if (entity['lead']['description'] != null) {
-      widgetsList.add(new Text(entity['lead']['description'], style: Theme.of(context).textTheme.subhead));
+    if (entity.description != null) {
+      widgetsList.add(new Text(entity.description, style: Theme.of(context).textTheme.subhead));
       widgetsList.add(const Divider());
     }
 
     // main section
-    widgetsList.add(new HtmlWrapper(htmlStr: entity['lead']['sections'][0]['text']));
+    widgetsList.add(new HtmlWrapper(htmlStr: entity.sections.first.htmlText));
     widgetsList.add(const Divider());
 
     // remaining sections list
@@ -146,7 +142,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
   }
 
   List<Widget> _remainingSectionsOutline () {
-    if (entity['lead']['sections'].length < 1) { return []; }
+    if (entity.sections.length < 1) { return []; }
 
     return sectionOutlineTiles(entity, rootSectionId: 0);
   }
