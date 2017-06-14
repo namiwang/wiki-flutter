@@ -16,14 +16,9 @@
     - see also
 
 - links
-  - BUG ONTAP NOT WORKING
   - internal
     - handle link with anchor as section
     - ciatation/ref via snackbar
-  - external
-
-- elegant nested sections
-  - maybe outline in drawer
 
 - key and hero transition
 
@@ -53,10 +48,9 @@
 - splash screen
 - about dialog
 - handle wiki://, or http://en.wikipedia... link
+- selecting text
 
 # LATER MAYBE
 
 - some cool stuff
   - cool floating vertical slider as scroller
-  - cool animation
-    - say expanding panels while scrolling

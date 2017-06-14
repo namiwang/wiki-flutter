@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import '../views/shared/html_wrapper.dart';
 
 class Entity {
@@ -14,6 +19,15 @@ class Entity {
     {
       // TODO cite refs
     }
+
+
+  static Future<Entity> fetch({String title}) async {
+    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${title}";
+
+    final Map entityMap = JSON.decode(await http.read(url));
+
+    return new Entity(entityMap);
+  }
 }
 
 String _extractCoverImgSrc(Map map){

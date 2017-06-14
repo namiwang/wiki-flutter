@@ -4,16 +4,6 @@
 //   - hatnotes
 //   - category
 
-// sections, listtile.title
-// - text contains html tags like <span> MUST DONE
-// - BUT long text eclipse MUST DONE
-
-// sections, listTile.selected
-
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
 
 import '../../models/entity.dart';
@@ -23,7 +13,7 @@ import './shared/section_outline_tiles.dart';
 import './shared/drawer.dart';
 
 class EntitiesShow extends StatefulWidget {
-  final String title; // TODO TO-REFINE, actually this may be encoded title or not
+  final String title; // NOTE TODO TO-REFINE, actually this may be encoded title or not
   final Entity entity;
 
   EntitiesShow({Key key, this.entity, this.title}) : super(key: key);
@@ -43,9 +33,9 @@ class _EntitiesShowState extends State<EntitiesShow> {
     if ( widget.entity != null ) {
       setState((){ this.entity = widget.entity; });
     } else {
-      _fetchEntity().then( (fetchedEntityMap) {
+      Entity.fetch(title: widget.title).then( (Entity fetchedEntity) {
         setState((){
-          this.entity = new Entity(fetchedEntityMap);
+          this.entity = fetchedEntity;
         });
       });
     }
@@ -92,21 +82,10 @@ class _EntitiesShowState extends State<EntitiesShow> {
   Widget _buildTitle() {
     return
       ( entity != null ) ? (
-        // TODO not that elegant, need more spec
-        // TODO maybe more tags (like span) in title?
-        // TODO maybe just use the htmlWrapper and set a theme
         new Text(entity.displayTitle)
       ) : (
         new Text(widget.title)
       );
-  }
-
-  Future<Map> _fetchEntity() async {
-    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${widget.title}";
-
-    final Map entity = JSON.decode(await http.read(url));
-
-    return entity;
   }
 
   Widget _buildCoverImg() {
@@ -122,7 +101,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
     List<Widget> widgetsList = [];
 
     // title
-    // TODO title is already in the appbar, though still need to handle super-long title
+    // TODO NOTE title is already in the appbar, though still need to handle super-long title
     // widgetsList.add(new Text(entity['lead']['displaytitle']));
 
     // description
