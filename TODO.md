@@ -17,8 +17,8 @@
 
 - links
   - internal
+    - ciatation/ref/footnotes via snackbar
     - handle link with anchor as section
-    - ciatation/ref via snackbar
 
 - key and hero transition
 

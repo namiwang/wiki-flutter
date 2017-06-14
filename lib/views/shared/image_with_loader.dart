@@ -40,7 +40,7 @@ class _ImageWithLoaderState extends State<ImageWithLoader> {
     }
 
     if ( widget.imgSrc.endsWith('.gif') ) {
-      return new AnimatedGif(imgBytes);
+      return new AnimatedGif.memory(imgBytes);
     } else {
       return new Image.memory(imgBytes);
     }
