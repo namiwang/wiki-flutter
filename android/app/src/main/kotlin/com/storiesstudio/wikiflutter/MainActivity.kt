@@ -1,4 +1,4 @@
-package com.storiesstudio.wikiflutter
+package com.nanowang.wikiflutter
 
 import android.os.Bundle
 
