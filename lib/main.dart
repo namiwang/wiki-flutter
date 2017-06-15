@@ -24,8 +24,7 @@ class WikiFlutterApp extends StatelessWidget {
   }
 
   Route<Null> _handleRoute(RouteSettings settings) {
-    print('--- handling route');
-    print(settings);
+    print('--- handling route: ' + settings.toString());
 
     // TODO not that elegant
 

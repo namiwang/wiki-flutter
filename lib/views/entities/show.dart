@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/entity.dart';
 
-import '../shared/html_wrapper.dart';
+import '../shared/entities_helper.dart' as entitiesHelper;
 import './shared/section_outline_tiles.dart';
 import './shared/drawer.dart';
 
@@ -111,7 +111,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
     }
 
     // main section
-    widgetsList.add(new HtmlWrapper(htmlStr: entity.sections.first.htmlText));
+    widgetsList.add(new entitiesHelper.SectionHtmlWrapper(entity: entity, sectionId: 0));
     widgetsList.add(const Divider());
 
     // remaining sections list

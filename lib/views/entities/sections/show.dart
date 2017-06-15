@@ -3,12 +3,9 @@
 //   - use the first image in section ?
 //   - or use the cover image from parent entity ?
 
-// TODO
-  // DRAWER
-
 import 'package:flutter/material.dart';
 
-import '../../shared/html_wrapper.dart';
+import '../../shared/entities_helper.dart' as entitiesHelper;
 
 import '../../../models/entity.dart';
 
@@ -27,7 +24,7 @@ class EntitiesSectionsShow extends StatelessWidget {
     List<Widget> contentWidgets = [];
 
     contentWidgets.add(
-      new HtmlWrapper(htmlStr: section.htmlText)
+      new entitiesHelper.SectionHtmlWrapper(entity: entity, sectionId: section.id,)
     );
 
     contentWidgets.add(const Divider());
