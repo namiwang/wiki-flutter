@@ -4,29 +4,32 @@ import './views/pages/home.dart';
 import './views/entities/show.dart';
 
 void main() {
-  // TODO splash-screen
   runApp(new WikiFlutterApp());
 }
 
 class WikiFlutterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'WikiFlutter',
-      theme: new ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => new PagesHome(),
-      },
-      onGenerateRoute: _handleRoute,
+    return new Banner(
+      message: 'Alpha',
+      location: BannerLocation.topRight,
+      child: new MaterialApp(
+        title: 'WikiFlutter',
+        theme: new ThemeData(
+          primarySwatch: Colors.blueGrey,
+        ),
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) => new PagesHome(),
+        },
+        onGenerateRoute: _handleRoute,
+      )
     );
   }
 
   Route<Null> _handleRoute(RouteSettings settings) {
     print('--- handling route: ' + settings.toString());
 
-    // TODO not that elegant
+    // TODO not that elegant, check out the route lib by posse
 
     final List<String> path = settings.name.split('/');
 
