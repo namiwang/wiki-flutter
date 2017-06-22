@@ -8,8 +8,12 @@ import 'package:flutter_animated/animated_gif.dart';
 
 // TODO checkout FutureBuilder
 // https://docs.flutter.io/flutter/widgets/FutureBuilder-class.html
+// NOTE tried. not that elegant. got weird screen flicker
 
 // TODO progress percentage
+
+// TODO cache image
+// TODO checkout globalcache pvovided by flutter
 
 class ImageWithLoader extends StatefulWidget {
   final String imgSrc;
@@ -21,7 +25,7 @@ class ImageWithLoader extends StatefulWidget {
 }
 
 class _ImageWithLoaderState extends State<ImageWithLoader> {
-  Uint8List imgBytes;
+  Widget image;
 
   @override
   void initState() {
@@ -32,22 +36,22 @@ class _ImageWithLoaderState extends State<ImageWithLoader> {
 
   @override
   Widget build(BuildContext context) {
-    if ( imgBytes == null ) {
+    if ( image == null ) {
       return new Container(
         child: const CircularProgressIndicator(),
         alignment: FractionalOffset.center,
       );
-    }
-
-    if ( widget.imgSrc.endsWith('.gif') ) {
-      return new AnimatedGif.memory(imgBytes);
     } else {
-      return new Image.memory(imgBytes);
+      return image;
     }
   }
 
   Future<Null> _fetchImg() async {
     final bytes = await http.readBytes(widget.imgSrc);
-    setState((){ imgBytes = bytes; });
+    if ( widget.imgSrc.endsWith('.gif') ) {
+      setState((){ image = new AnimatedGif.memory(bytes); });
+    } else {
+      setState((){ image = new Image.memory(bytes); });
+    }
   }
 }

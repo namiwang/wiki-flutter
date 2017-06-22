@@ -10,6 +10,8 @@ import '../../models/entity.dart';
 import './html_parser.dart';
 import './html_wrapper.dart';
 
+import '../pages/full_image.dart';
+
 class SectionHtmlWrapper extends StatelessWidget {
   final Entity entity;
   final int sectionId;
@@ -82,4 +84,30 @@ TextSpan refLink({Entity entity, BuildContext context, String anchor, String tex
     };
 
   return new TextSpan(text: text, style: refLinkStyle, recognizer: recognizer);
+}
+
+class ClickableImage extends StatelessWidget {
+  const ClickableImage({ Key key, this.image }) : super(key: key);
+
+  final Widget image;
+
+  @override
+  Widget build(BuildContext context) {
+    assert(debugCheckHasMaterial(context));
+    return new InkWell(
+      child: new Hero(
+        tag: image,
+        child: image,
+      ),
+      onTap: (){
+        Navigator.of(context).push(
+          new MaterialPageRoute<Null>(
+            builder: (BuildContext context) {
+              return new PagesFullImage(image: image);
+            }
+          )
+        );
+      },
+    );
+  }
 }

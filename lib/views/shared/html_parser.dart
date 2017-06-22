@@ -75,13 +75,8 @@ class HtmlParser {
       case 'img':
         _tryCloseCurrentTextSpan();
 
-        // TODO
-        // - with placeholder
-        // - click to show a fullscreen image
-        // - support animated gif
-
         final imgSrc = 'https:' + element.attributes['src'];
-        final img = new ImageWithLoader(imgSrc);
+        final img = new entitiesHelper.ClickableImage(image: new ImageWithLoader(imgSrc));
         _widgets.add(
           new Container(
             padding: const EdgeInsets.all(16.0),
