@@ -47,7 +47,7 @@ class _ImageWithLoaderState extends State<ImageWithLoader> {
   }
 
   Future<Null> _fetchImg() async {
-    final bytes = await http.readBytes(widget.imgSrc);
+    final Uint8List bytes = await http.readBytes(widget.imgSrc);
     if ( widget.imgSrc.endsWith('.gif') ) {
       setState((){ image = new AnimatedGif.memory(bytes); });
     } else {
