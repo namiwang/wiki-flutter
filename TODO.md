@@ -24,6 +24,7 @@
       - [x] citing
       - [ ] footnote
       - [ ] ref link style
+        - https://github.com/flutter/flutter/issues/10906
     - handle link with anchor as section
 
 - key and hero transition
