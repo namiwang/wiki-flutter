@@ -1,12 +1,11 @@
 // import 'dart:developer';
 
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 
 import 'package:html/parser.dart' as html show parse;
 import 'package:html/dom.dart' as html;
+
+import '../shared/wiki_client.dart' as wikiClient;
 
 import '../views/shared/html_parser.dart';
 
@@ -31,10 +30,7 @@ class Entity {
     }
 
   static Future<Entity> fetch({String title}) async {
-    final url = "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${title}";
-
-    final Map entityMap = JSON.decode(await http.read(url));
-
+    final Map entityMap = await wikiClient.Restful.getEntity(title);
     return new Entity(entityMap);
   }
 

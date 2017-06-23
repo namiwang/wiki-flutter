@@ -17,6 +17,8 @@
   - issues, hatnotes
     - main article
     - see also
+  - to handle
+    - disambiguation
 
 - links
   - internal
@@ -43,9 +45,9 @@
 - clickableImage/fullpageImage: should not load image again.
   - check out about globalkey
 
-# PERFORMANCE
+- PERFORMANCE fullpageImage, parseHtml got invoked when tap on image
 
-- fullpageImage, parseHtml got invoked when tap on image
+- CRASH parsing huge html segment, say "Soviet Union"
 
 # LATER MUST HAVE
 
@@ -68,3 +70,7 @@
 
 - some cool stuff
   - cool floating vertical slider as scroller
+
+# CODING
+
+- MAYBE rename Entity -> Article to follow wiki's convention
