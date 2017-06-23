@@ -9,7 +9,7 @@ import '../../shared/entities_helper.dart' as entitiesHelper;
 
 import '../../../models/entity.dart';
 
-import '../shared/drawer.dart';
+import '../../shared/drawer.dart';
 import '../shared/section_outline_tiles.dart';
 
 class EntitiesSectionsShow extends StatelessWidget {
@@ -31,7 +31,7 @@ class EntitiesSectionsShow extends StatelessWidget {
     contentWidgets.addAll(sectionOutlineTiles(entity, rootSectionId: section.id));
 
     return new Scaffold(
-      drawer: new EntitiesShowDrawer(entity: entity, currentSectionId: section.id),
+      drawer: new WikiFlutterDrawer(currentEntry: entity, currentSectionId: section.id),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(

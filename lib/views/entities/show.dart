@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import '../../models/entity.dart';
 
 import '../shared/entities_helper.dart' as entitiesHelper;
+import '../shared/drawer.dart';
 import './shared/section_outline_tiles.dart';
-import './shared/drawer.dart';
 
 class EntitiesShow extends StatefulWidget {
   final String title; // NOTE TODO TO-REFINE, actually this may be encoded title or not
@@ -56,7 +56,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
                            );
 
     return new Scaffold(
-      drawer: new EntitiesShowDrawer(entity: entity, currentSectionId: 0),
+      drawer: new WikiFlutterDrawer(currentEntry: entity, currentSectionId: 0),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(

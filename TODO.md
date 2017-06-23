@@ -1,5 +1,8 @@
 # v0
 
+- CODING entity -> entry
+  - maybe article eventually?
+
 - to read
   - https://en.wikipedia.org/wiki/Wikipedia:Naming_conventions_(technical_restrictions)
 
@@ -19,6 +22,8 @@
     - see also
   - to handle
     - disambiguation
+    - media file
+      - special link
 
 - links
   - internal
@@ -49,11 +54,11 @@
 
 - CRASH parsing huge html segment, say "Soviet Union"
 
+- title text in appbar above background image may be indistinguishable with the image, say both are white
+
 # LATER MUST HAVE
 
-- search https://github.com/flutter/flutter/issues/9783
 - delegate home page
-- title text in appbar above background image may be indistinguishable with the image, say both are white
 - multiple languages
 
 # LATER SHOULD HAVE
