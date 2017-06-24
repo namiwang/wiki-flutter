@@ -2,40 +2,40 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../models/entity.dart';
+import '../../../models/entry.dart';
 
 // import '../../shared/html_wrapper.dart';
 import '../show.dart';
 import '../sections/show.dart';
 
 // TODO may be refined after models created. maybe move code to models.
-List<Widget> sectionOutlineTiles(Entity entity, { rootSectionId: 0, selectedSectionId: null, showMainSection: false }) {
+List<Widget> sectionOutlineTiles(Entry entry, { rootSectionId: 0, selectedSectionId: null, showMainSection: false }) {
   List<Section> sections = [];
   if ( rootSectionId == 0 ) {
-    sections = entity.sections;
+    sections = entry.sections;
   } else {
-    final int rootSectionTocLevel = entity.sections[rootSectionId].tocLevel;
-    for (var cursorSectionId = rootSectionId + 1 ; cursorSectionId < entity.sections.length ; cursorSectionId++ ) {
-      final Section cursorSection = entity.sections[cursorSectionId];
+    final int rootSectionTocLevel = entry.sections[rootSectionId].tocLevel;
+    for (var cursorSectionId = rootSectionId + 1 ; cursorSectionId < entry.sections.length ; cursorSectionId++ ) {
+      final Section cursorSection = entry.sections[cursorSectionId];
       if ( cursorSection.tocLevel <= rootSectionTocLevel ) { break; }
       sections.add(cursorSection);
     }
     // add current section as a header in the outline
-    if (sections.length > 0) { sections.insert(0, entity.sections[rootSectionId]); }
+    if (sections.length > 0) { sections.insert(0, entry.sections[rootSectionId]); }
   }
 
   final iterableSections = showMainSection ? sections : sections.skipWhile( (Section section) => section.id == 0 );
   return iterableSections.map((Section section){
-    return new _SectionListTile(entity, section, (section.id == selectedSectionId));
+    return new _SectionListTile(entry, section, (section.id == selectedSectionId));
   }).toList();
 }
 
 class _SectionListTile extends StatelessWidget {
-  final Entity entity;
+  final Entry entry;
   final Section section;
   final bool selected;
 
-  _SectionListTile(this.entity, this.section, this.selected, { Key key }) : super(key: key);
+  _SectionListTile(this.entry, this.section, this.selected, { Key key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _SectionListTile extends StatelessWidget {
 
     final Widget titleContent =
       ( section.id == 0 ) ?
-      ( new Expanded( child: new Text('Main Section') ) ): // TODO use entity title?
+      ( new Expanded( child: new Text('Main Section') ) ): // TODO use entry title?
       ( new Expanded( child: new Text( section.title ) ) );
     final List<Widget> titleRowChildren = []
       ..addAll(prefixIcons)
@@ -65,7 +65,7 @@ class _SectionListTile extends StatelessWidget {
         Navigator.of(context).push(
           new MaterialPageRoute<Null>(
             builder: (BuildContext context) {
-              return ( section.id == 0 ) ? ( new EntitiesShow( entity: entity ) ) : ( new EntitiesSectionsShow(entity: entity, section: section) );
+              return ( section.id == 0 ) ? ( new EntriesShow( entry: entry ) ) : ( new EntriesSectionsShow(entry: entry, section: section) );
             }
           )
         );

@@ -1,41 +1,41 @@
 // TODO
-// - entity
+// - entry
 //   - issues
 //   - hatnotes
 //   - category
 
 import 'package:flutter/material.dart';
 
-import '../../models/entity.dart';
+import '../../models/entry.dart';
 
-import '../shared/entities_helper.dart' as entitiesHelper;
+import '../shared/entries_helper.dart' as entriesHelper;
 import '../shared/drawer.dart';
 import './shared/section_outline_tiles.dart';
 
-class EntitiesShow extends StatefulWidget {
+class EntriesShow extends StatefulWidget {
   final String title; // NOTE TODO TO-REFINE, actually this may be encoded title or not
-  final Entity entity;
+  final Entry entry;
 
-  EntitiesShow({Key key, this.entity, this.title}) : super(key: key);
+  EntriesShow({Key key, this.entry, this.title}) : super(key: key);
 
   @override
-  _EntitiesShowState createState() => new _EntitiesShowState();
+  _EntriesShowState createState() => new _EntriesShowState();
 }
 
-class _EntitiesShowState extends State<EntitiesShow> {
-  Entity entity;
+class _EntriesShowState extends State<EntriesShow> {
+  Entry entry;
 
   @override
   void initState() {
     super.initState();
 
-    // prefer passed-in existing entity than fetching via title
-    if ( widget.entity != null ) {
-      setState((){ this.entity = widget.entity; });
+    // prefer passed-in existing entry than fetching via title
+    if ( widget.entry != null ) {
+      setState((){ this.entry = widget.entry; });
     } else {
-      Entity.fetch(title: widget.title).then( (Entity fetchedEntity) {
+      Entry.fetch(title: widget.title).then( (Entry fetchedEntry) {
         setState((){
-          this.entity = fetchedEntity;
+          this.entry = fetchedEntry;
         });
       });
     }
@@ -43,7 +43,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget content = ( entity == null ) ? (
+    final Widget content = ( entry == null ) ? (
                              new SliverFillRemaining(
                                child: new Center(
                                  child: new CircularProgressIndicator()
@@ -56,7 +56,7 @@ class _EntitiesShowState extends State<EntitiesShow> {
                            );
 
     return new Scaffold(
-      drawer: new WikiFlutterDrawer(currentEntry: entity, currentSectionId: 0),
+      drawer: new WikiFlutterDrawer(currentEntry: entry, currentSectionId: 0),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(
@@ -81,16 +81,16 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
   Widget _buildTitle() {
     return
-      ( entity != null ) ? (
-        new Text(entity.displayTitle)
+      ( entry != null ) ? (
+        new Text(entry.displayTitle)
       ) : (
         new Text(widget.title)
       );
   }
 
   Widget _buildCoverImg() {
-    if (entity != null && entity.coverImgSrc != null) {
-      return new Image.network(entity.coverImgSrc, fit: BoxFit.cover);
+    if (entry != null && entry.coverImgSrc != null) {
+      return new Image.network(entry.coverImgSrc, fit: BoxFit.cover);
     } else {
       // TODO shared assets helper
       return new Image.asset('assets/images/placeholder.jpg', fit: BoxFit.cover);
@@ -102,16 +102,16 @@ class _EntitiesShowState extends State<EntitiesShow> {
 
     // title
     // TODO NOTE title is already in the appbar, though still need to handle super-long title
-    // widgetsList.add(new Text(entity['lead']['displaytitle']));
+    // widgetsList.add(new Text(entry['lead']['displaytitle']));
 
     // description
-    if (entity.description != null) {
-      widgetsList.add(new Text(entity.description, style: Theme.of(context).textTheme.subhead));
+    if (entry.description != null) {
+      widgetsList.add(new Text(entry.description, style: Theme.of(context).textTheme.subhead));
       widgetsList.add(const Divider());
     }
 
     // main section
-    widgetsList.add(new entitiesHelper.SectionHtmlWrapper(entity: entity, sectionId: 0));
+    widgetsList.add(new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: 0));
     widgetsList.add(const Divider());
 
     // remaining sections list
@@ -121,8 +121,8 @@ class _EntitiesShowState extends State<EntitiesShow> {
   }
 
   List<Widget> _remainingSectionsOutline () {
-    if (entity.sections.length < 1) { return []; }
+    if (entry.sections.length < 1) { return []; }
 
-    return sectionOutlineTiles(entity, rootSectionId: 0);
+    return sectionOutlineTiles(entry, rootSectionId: 0);
   }
 }

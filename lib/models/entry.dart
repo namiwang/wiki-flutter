@@ -9,7 +9,7 @@ import '../shared/wiki_client.dart' as wikiClient;
 
 import '../views/shared/html_parser.dart';
 
-class Entity {
+class Entry {
   final String displayTitle;
   final String description;
   final String coverImgSrc;
@@ -17,7 +17,7 @@ class Entity {
   // TODO footnotes;
   Map<String, String> citings;
 
-  Entity(Map map)
+  Entry(Map map)
     : displayTitle = parseInlineHtml( map['lead']['displaytitle'] as String ),
       description = map['lead']['description'],
       coverImgSrc = _extractCoverImgSrc(map),
@@ -29,9 +29,8 @@ class Entity {
       citings = _extractCitings();
     }
 
-  static Future<Entity> fetch({String title}) async {
-    final Map entityMap = await wikiClient.Restful.getEntity(title);
-    return new Entity(entityMap);
+  static Future<Entry> fetch({String title}) async {
+    return await wikiClient.Restful.getEntry(title);
   }
 
   static String _extractCoverImgSrc(Map map){

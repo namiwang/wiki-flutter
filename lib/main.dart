@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './views/pages/home.dart';
-import './views/entities/show.dart';
+import './views/entries/show.dart';
 
 void main() {
   runApp(new WikiFlutterApp());
@@ -33,13 +33,13 @@ class WikiFlutterApp extends StatelessWidget {
 
     final List<String> path = settings.name.split('/');
 
-    // /entities/:title
-    if ( path.length == 3 && path[0] == '' && path[1] == 'entities' ) {
+    // /entries/:title
+    if ( path.length == 3 && path[0] == '' && path[1] == 'entries' ) {
       final String title = path[2];
 
       return new MaterialPageRoute<Null>(
         settings: settings,
-        builder: (BuildContext context) => new EntitiesShow(title: title)
+        builder: (BuildContext context) => new EntriesShow(title: title)
       );
     }
 

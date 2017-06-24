@@ -1,22 +1,22 @@
 // TODO
 // - cover image
 //   - use the first image in section ?
-//   - or use the cover image from parent entity ?
+//   - or use the cover image from parent entry ?
 
 import 'package:flutter/material.dart';
 
-import '../../shared/entities_helper.dart' as entitiesHelper;
+import '../../shared/entries_helper.dart' as entriesHelper;
 
-import '../../../models/entity.dart';
+import '../../../models/entry.dart';
 
 import '../../shared/drawer.dart';
 import '../shared/section_outline_tiles.dart';
 
-class EntitiesSectionsShow extends StatelessWidget {
-  final Entity entity;
+class EntriesSectionsShow extends StatelessWidget {
+  final Entry entry;
   final Section section;
 
-  EntitiesSectionsShow({ Key key, this.entity, this.section }) : super(key: key);
+  EntriesSectionsShow({ Key key, this.entry, this.section }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +24,14 @@ class EntitiesSectionsShow extends StatelessWidget {
     List<Widget> contentWidgets = [];
 
     contentWidgets.add(
-      new entitiesHelper.SectionHtmlWrapper(entity: entity, sectionId: section.id,)
+      new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: section.id,)
     );
 
     contentWidgets.add(const Divider());
-    contentWidgets.addAll(sectionOutlineTiles(entity, rootSectionId: section.id));
+    contentWidgets.addAll(sectionOutlineTiles(entry, rootSectionId: section.id));
 
     return new Scaffold(
-      drawer: new WikiFlutterDrawer(currentEntry: entity, currentSectionId: section.id),
+      drawer: new WikiFlutterDrawer(currentEntry: entry, currentSectionId: section.id),
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(

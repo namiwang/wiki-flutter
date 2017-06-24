@@ -115,7 +115,7 @@ class _PagesHomeState extends State<PagesHome> {
               text: new TextSpan(text: e.summary, style: Theme.of(context).textTheme.body1),
               overflow: TextOverflow.ellipsis,
             ),
-            onTap: (){ Navigator.pushNamed(context, "/entities/${e.title}"); }
+            onTap: (){ Navigator.pushNamed(context, "/entries/${e.title}"); }
           ),
         )
         ..add( const Divider() );

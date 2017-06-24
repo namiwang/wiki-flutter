@@ -1,12 +1,9 @@
 # v0
 
-- CODING entity -> entry
-  - maybe article eventually?
-
 - to read
   - https://en.wikipedia.org/wiki/Wikipedia:Naming_conventions_(technical_restrictions)
 
-- entity content
+- entry content
   - html parsing
     - image
       - some icon should be inline
@@ -39,8 +36,8 @@
 - drawer
   - about modal
 
-- handle long entity title in entity/show/appbar
-- handle long section title in entity/section/show/appbar
+- handle long entry title in entry/show/appbar
+- handle long section title in entry/section/show/appbar
 
 - CODING
   - share utils and theme
@@ -55,6 +52,8 @@
 - CRASH parsing huge html segment, say "Soviet Union"
 
 - title text in appbar above background image may be indistinguishable with the image, say both are white
+
+- CODING MAYBE entry -> article?
 
 # LATER MUST HAVE
 
@@ -78,4 +77,4 @@
 
 # CODING
 
-- MAYBE rename Entity -> Article to follow wiki's convention
+- MAYBE rename Entry -> Article to follow wiki's convention

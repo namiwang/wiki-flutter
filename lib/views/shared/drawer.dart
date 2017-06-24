@@ -3,12 +3,12 @@ import 'package:flutter/gestures.dart';
 
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 
-import '../../models/entity.dart';
+import '../../models/entry.dart';
 
-import '../entities/shared/section_outline_tiles.dart';
+import '../entries/shared/section_outline_tiles.dart';
 
 class WikiFlutterDrawer extends StatelessWidget {
-  final Entity currentEntry;
+  final Entry currentEntry;
   final int currentSectionId;
 
   WikiFlutterDrawer({ Key key, this.currentEntry, this.currentSectionId }) : super(key: key);
@@ -96,7 +96,7 @@ class WikiFlutterDrawer extends StatelessWidget {
   }
 }
 
-// TODO separate and replace the original one in html-parser/entities-helper
+// TODO separate and replace the original one in html-parser/entries-helper
 class _LinkTextSpan extends TextSpan {
   _LinkTextSpan({ TextStyle style, String url, String text }) : super(
     style: style,

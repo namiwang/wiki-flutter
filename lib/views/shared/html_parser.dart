@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as html show parse;
 import 'package:html/dom.dart' as html;
 
-import './entities_helper.dart' as entitiesHelper;
+import './entries_helper.dart' as entriesHelper;
 
 import './image_with_loader.dart';
 
 class HtmlParser {
   final BuildContext context;
-  final Map appContext; // possible keys: [entity], TODO REFINE not that elegant, should pass-in, say, a refTextBuilder
+  final Map appContext; // possible keys: [entry], TODO REFINE not that elegant, should pass-in, say, a refTextBuilder
   final TextTheme textTheme;
 
   HtmlParser(this.context, {this.appContext: const {}})
@@ -76,7 +76,7 @@ class HtmlParser {
         _tryCloseCurrentTextSpan();
 
         final imgSrc = 'https:' + element.attributes['src'];
-        final img = new entitiesHelper.ClickableImage(image: new ImageWithLoader(imgSrc));
+        final img = new entriesHelper.ClickableImage(image: new ImageWithLoader(imgSrc));
         _widgets.add(
           new Container(
             padding: const EdgeInsets.all(16.0),
@@ -120,7 +120,7 @@ class HtmlParser {
           final text = element.text;
           final href = element.attributes['href'];
 
-          _appendToCurrentTextSpans(entitiesHelper.textLink(context: context, text: text, href: href));
+          _appendToCurrentTextSpans(entriesHelper.textLink(context: context, text: text, href: href));
 
           return;
         }
@@ -128,12 +128,12 @@ class HtmlParser {
         // citing ref
         // <a href=\"#cite_note-18\" style=\"counter-reset: mw-Ref 13;\"><span class=\"mw-reflink-text\">[13]</span></a></span>
         if ( element.attributes['href'].startsWith('#cite_note-') ) {
-          if (appContext['entity'] == null) { return; } // NOT THAT ELEGANT
+          if (appContext['entry'] == null) { return; } // NOT THAT ELEGANT
 
           final text = element.text;
           final anchor = element.attributes['href'].replaceFirst('#', '');
 
-          _appendToCurrentTextSpans(entitiesHelper.refLink(entity: appContext['entity'], context: context, text: text, anchor: anchor));
+          _appendToCurrentTextSpans(entriesHelper.refLink(entry: appContext['entry'], context: context, text: text, anchor: anchor));
 
           return;
         }
@@ -209,7 +209,7 @@ class HtmlParser {
 
 }
 
-// for section name, entity title, etc
+// for section name, entry title, etc
 // this is a quick, yet not elegant way to parse inline html
 // it just remove all expecting tags and return a string
 parseInlineHtml(String htmlStr) {

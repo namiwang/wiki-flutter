@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/entity.dart';
+import '../../models/entry.dart';
 
 import './html_parser.dart';
 import './html_wrapper.dart';
@@ -13,14 +13,14 @@ import './html_wrapper.dart';
 import '../pages/full_image.dart';
 
 class SectionHtmlWrapper extends StatelessWidget {
-  final Entity entity;
+  final Entry entry;
   final int sectionId;
 
-  SectionHtmlWrapper({ Key key, this.entity, this.sectionId }) : super(key: key);
+  SectionHtmlWrapper({ Key key, this.entry, this.sectionId }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return (new HtmlParser(context, appContext: {'entity': entity}).parse(entity.sections[sectionId].htmlText));
+    return (new HtmlParser(context, appContext: {'entry': entry}).parse(entry.sections[sectionId].htmlText));
   }
 }
 
@@ -33,10 +33,10 @@ TextSpan textLink({BuildContext context, String text, String href}) {
   // static final suffixIconString = new String.fromCharCode(Icons.open_in_browser.codePoint);
   // static final suffixIconStyle = linkStyle.apply(fontFamily: 'MaterialIcons');
 
-  TextSpan _textSpanForInternalEntityLink(String targetEntityTitle) {
+  TextSpan _textSpanForInternalEntryLink(String targetEntryTitle) {
     final recognizer = new TapGestureRecognizer()
       ..onTap = (){
-        Navigator.pushNamed(context, "/entities/$targetEntityTitle");
+        Navigator.pushNamed(context, "/entries/$targetEntryTitle");
       };
 
     return new TextSpan(
@@ -57,23 +57,23 @@ TextSpan textLink({BuildContext context, String text, String href}) {
     );
   }
 
-  // internal link to another entity
+  // internal link to another entry
   // <a href=\"/wiki/Political_union\" title=\"Political union\">political</a> and <a href=\"/wiki/Economic_union\" title=\"Economic union\">economic union</a>
   if ( href.startsWith('/wiki/') ) {
-    final String targetEntityTiele = href.replaceAll('/wiki/', '');
-    return _textSpanForInternalEntityLink(targetEntityTiele);
+    final String targetEntryTiele = href.replaceAll('/wiki/', '');
+    return _textSpanForInternalEntryLink(targetEntryTiele);
   }
 
   // default as an external link
   return _textSpanForExternalLink();
 }
 
-TextSpan refLink({Entity entity, BuildContext context, String anchor, String text}){
+TextSpan refLink({Entry entry, BuildContext context, String anchor, String text}){
   final refLinkStyle = Theme.of(context).textTheme.caption.copyWith(color: Colors.blue);
 
   final recognizer = new TapGestureRecognizer()
     ..onTap = (){
-      final citingHtmlStr = entity.citings[anchor] ?? 'citing not found';
+      final citingHtmlStr = entry.citings[anchor] ?? 'citing not found';
 
       showModalBottomSheet(context: context, builder: (BuildContext context) {
         return new Container(
