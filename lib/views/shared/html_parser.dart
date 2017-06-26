@@ -96,12 +96,10 @@ class HtmlParser {
       case 'table':
         _tryCloseCurrentTextSpan();
 
-        // TODO PRIMARY OBJECT
         _widgets.add(
-          new Container(
-            padding: const EdgeInsets.all(16.0),
-            alignment: FractionalOffset.center,
-            child: const Text('<TABLE> placeholder')
+          new entriesHelper.HintTile(
+            text: 'WikiFlutter is still in alpha and doesn\'t support tables for now.',
+            icon: const Icon(Icons.border_all),
           )
         );
 
