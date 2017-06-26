@@ -23,6 +23,13 @@ class EntriesSectionsShow extends StatelessWidget {
     // build content widgets
     List<Widget> contentWidgets = [];
 
+    // hatnotes
+    for (var hatnote in section.hatnotes) {
+      contentWidgets.add(
+        new entriesHelper.HintTile.withHtmlStr(htmlStr: hatnote)
+      );
+    }
+
     contentWidgets.add(
       new Container(
         padding: const EdgeInsets.all(16.0),
@@ -30,8 +37,9 @@ class EntriesSectionsShow extends StatelessWidget {
       )
     );
 
-    contentWidgets.add(const Divider());
-    contentWidgets.addAll(sectionOutlineTiles(entry, rootSectionId: section.id));
+    contentWidgets
+      ..add(const Divider())
+      ..addAll(sectionOutlineTiles(entry, rootSectionId: section.id));
 
     return new Scaffold(
       drawer: new WikiFlutterDrawer(currentEntry: entry, currentSectionId: section.id),

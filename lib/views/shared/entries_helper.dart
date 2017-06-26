@@ -115,18 +115,23 @@ class ClickableImage extends StatelessWidget {
   }
 }
 
-class HintCard extends Container {
-  HintCard({ @required String text, TextStyle style, TextAlign align }) : super(
-    padding: const EdgeInsets.all(16.0),
-    child: new Card(
-      child: new Container(
-        padding: const EdgeInsets.all(16.0),
-        child: new Text(
-          text,
-          style: style,
-          textAlign: align ?? TextAlign.center,
-        ),
-      )
+class HintTile extends Container {
+  HintTile({ @required String text, Icon icon: const Icon(Icons.info_outline)}) : super(
+    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+    child: new ListTile(
+      leading: icon,
+      title: new Text(text),
+      dense: true,
+    )
+  );
+
+  // TODO there must be a better way, instead of writing most code twice
+  HintTile.withHtmlStr({ @required String htmlStr, Icon icon: const Icon(Icons.info_outline)}) : super(
+    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+    child: new ListTile(
+      leading: icon,
+      title: new HtmlWrapper(htmlStr: htmlStr),
+      dense: true,
     )
   );
 }

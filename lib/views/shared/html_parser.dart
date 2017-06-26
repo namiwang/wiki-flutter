@@ -56,12 +56,19 @@ class HtmlParser {
 
     switch (element.localName) {
       case 'p':
-      case 'div':
       case 'body':
         // traverse down the tree
         for (var subNode in element.nodes) { _parseNode(subNode); }
 
         _tryCloseCurrentTextSpan();
+
+        return;
+      case 'div':
+        // ignore hatnotes
+        if ( element.classes.contains('hatnote') ){ return; }
+
+        // traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
 
         return;
       case 'figure': // TODO
@@ -212,8 +219,19 @@ class HtmlParser {
 // for section name, entry title, etc
 // this is a quick, yet not elegant way to parse inline html
 // it just remove all expecting tags and return a string
-parseInlineHtml(String htmlStr) {
+String parseInlineHtml(String htmlStr) {
   print('*** parsing inline html...');
 
   return htmlStr.replaceAll(new RegExp("<\/*(i|b|span)>"), '');
+}
+
+// TODO refine
+// only used for extractionHatnotes in section's content
+// PERFORMANCE HELL this is another time of parsing
+// and currently we're parsing all sections when parsing the entry, which lead to freezing
+// maybe should the htmlParser.parse return both widget and hatenotes list
+List<String> extractHatnotes(String htmlStr) {
+  final elements = html.parse(htmlStr).querySelectorAll('div.hatnote');
+  if (elements.isEmpty) { return []; }
+  return elements.map((html.Element e){ return e.innerHtml ;}).toList();
 }

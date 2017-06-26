@@ -107,9 +107,18 @@ class _EntriesShowState extends State<EntriesShow> {
     // description
     if (entry.description != null) {
       widgetsList.add(
-        new entriesHelper.HintCard(
+        new entriesHelper.HintTile(
           text: entry.description,
-          style: Theme.of(context).textTheme.subhead,
+          icon: const Icon(Icons.format_quote)
+        )
+      );
+    }
+
+    // hatnotes
+    for (String hatnote in entry.hatnotes) {
+      widgetsList.add(
+        new entriesHelper.HintTile.withHtmlStr(
+          htmlStr: hatnote,
         )
       );
     }

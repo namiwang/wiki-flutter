@@ -13,6 +13,7 @@ class Entry {
   final String displayTitle;
   final String description;
   final String coverImgSrc;
+  final List<String> hatnotes; // NOTE html string
   final List<Section> sections;
   // TODO footnotes;
   Map<String, String> citings;
@@ -21,6 +22,7 @@ class Entry {
     : displayTitle = parseInlineHtml( map['lead']['displaytitle'] as String ),
       description = map['lead']['description'],
       coverImgSrc = _extractCoverImgSrc(map),
+      hatnotes = _extractHatnotes(map),
       sections = _extractSections(map)
     {
       // TODO footnotes
@@ -35,6 +37,11 @@ class Entry {
 
   static String _extractCoverImgSrc(Map map){
     return ( map['lead']['image'] != null ) ? ( 'https:' + map['lead']['image']['urls'][map['lead']['image']['urls'].keys.last] ) : ( null );
+  }
+
+  static List<String> _extractHatnotes(Map map) {
+    //  \"EU\" redirects here. For other uses, see <a href=\"/wiki/EU_(disambiguation)\" title=\"EU (disambiguation)\">EU (disambiguation)</a>.
+    return ( map['lead']['hatnotes'] ?? [] ) as List;
   }
 
   static List<Section> _extractSections(Map map){
@@ -71,8 +78,12 @@ class Section {
   final String htmlText;
   // TODO PERFORMANCE cache html widget
   final bool isReferenceSection;
+  final List<String> hatnotes;
 
-  Section({this.id, this.tocLevel, this.title, this.anchor, this.htmlText, this.isReferenceSection});
+  // PERFORMANCE HELL
+  // currently we're parsing all sections when parsing the entry, which lead to freezing
+  Section({this.id, this.tocLevel, this.title, this.anchor, this.htmlText, this.isReferenceSection}) :
+    hatnotes = extractHatnotes(htmlText);
 }
 
 class Citing {
