@@ -18,6 +18,7 @@ class _PagesHomeState extends State<PagesHome> {
 
   @override
   Widget build(BuildContext context) {
+    print('************ REBUILDING PagesHome');
     return new Scaffold(
       body: new CustomScrollView(
         slivers: <Widget>[
