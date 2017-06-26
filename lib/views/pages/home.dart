@@ -111,9 +111,12 @@ class _PagesHomeState extends State<PagesHome> {
       list
         ..add(
           new ListTile(
+            isThreeLine: true,
+            dense: true,
             title: new Text(e.title),
             subtitle: new RichText(
-              text: new TextSpan(text: e.summary, style: Theme.of(context).textTheme.body1),
+              text: new TextSpan(text: e.summary, style: Theme.of(context).textTheme.caption),
+              maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
             onTap: (){ Navigator.pushNamed(context, "/entries/${e.title}"); }

@@ -119,9 +119,9 @@ class HintTile extends Container {
   HintTile({ @required String text, Icon icon: const Icon(Icons.info_outline)}) : super(
     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
     child: new ListTile(
+      dense: true,
       leading: icon,
       title: new Text(text),
-      dense: true,
     )
   );
 
