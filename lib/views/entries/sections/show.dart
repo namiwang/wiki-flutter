@@ -24,7 +24,10 @@ class EntriesSectionsShow extends StatelessWidget {
     List<Widget> contentWidgets = [];
 
     contentWidgets.add(
-      new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: section.id,)
+      new Container(
+        padding: const EdgeInsets.all(16.0),
+        child: new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: section.id,)
+      )
     );
 
     contentWidgets.add(const Divider());

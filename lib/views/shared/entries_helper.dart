@@ -1,5 +1,6 @@
 // import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
@@ -112,4 +113,20 @@ class ClickableImage extends StatelessWidget {
       },
     );
   }
+}
+
+class HintCard extends Container {
+  HintCard({ @required String text, TextStyle style, TextAlign align }) : super(
+    padding: const EdgeInsets.all(16.0),
+    child: new Card(
+      child: new Container(
+        padding: const EdgeInsets.all(16.0),
+        child: new Text(
+          text,
+          style: style,
+          textAlign: align ?? TextAlign.center,
+        ),
+      )
+    )
+  );
 }

@@ -106,13 +106,22 @@ class _EntriesShowState extends State<EntriesShow> {
 
     // description
     if (entry.description != null) {
-      widgetsList.add(new Text(entry.description, style: Theme.of(context).textTheme.subhead));
-      widgetsList.add(const Divider());
+      widgetsList.add(
+        new entriesHelper.HintCard(
+          text: entry.description,
+          style: Theme.of(context).textTheme.subhead,
+        )
+      );
     }
 
     // main section
-    widgetsList.add(new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: 0));
-    widgetsList.add(const Divider());
+    widgetsList
+      ..add(
+        new Container(
+          padding: const EdgeInsets.all(16.0),
+          child: new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: 0))
+        )
+      ..add(const Divider());
 
     // remaining sections list
     widgetsList.addAll(_remainingSectionsOutline());
