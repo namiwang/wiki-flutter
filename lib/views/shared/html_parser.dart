@@ -92,7 +92,7 @@ class HtmlParser {
         final img = new entriesHelper.ClickableImage(image: new ImageWithLoader(imgSrc));
         _widgets.add(
           new Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
             alignment: FractionalOffset.center,
             child: img
           )
