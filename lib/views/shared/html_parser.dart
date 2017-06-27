@@ -43,6 +43,12 @@ class HtmlParser {
         _parseElement(node as html.Element);
         return;
       case html.Node.TEXT_NODE:
+        // NOTE if is contains only `\n`'s
+        if ( node.text.runes.toSet().difference(new Set.from([ new Runes('\n').first ])).isEmpty ) {
+          _tryCloseCurrentTextSpan();
+          return;
+        }
+
         _appendToCurrentTextSpans(node.text);
         return;
       default:
@@ -162,12 +168,17 @@ class HtmlParser {
 
     if (_currentTextSpans.isEmpty) { return; }
 
-    _widgets.add(new RichText(
-      text: new TextSpan(
-        style: textTheme.body1,
-        children: new List.from(_currentTextSpans)
+    _widgets.add(
+      new Container(
+        padding: const EdgeInsets.all(8.0),
+        child: new RichText(
+          text: new TextSpan(
+            style: textTheme.body1,
+            children: new List.from(_currentTextSpans)
+          )
+        )
       )
-    ));
+    );
 
     _currentTextSpans.clear();
   }

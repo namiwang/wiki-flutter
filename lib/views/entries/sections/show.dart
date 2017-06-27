@@ -26,7 +26,7 @@ class EntriesSectionsShow extends StatelessWidget {
     // hatnotes
     for (var hatnote in section.hatnotes) {
       contentWidgets.add(
-        new entriesHelper.HintTile.withHtmlStr(htmlStr: hatnote)
+        new entriesHelper.HintTile.withHtmlStr(htmlStr: hatnote, botPadding: false)
       );
     }
 

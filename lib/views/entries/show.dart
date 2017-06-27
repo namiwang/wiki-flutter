@@ -109,7 +109,8 @@ class _EntriesShowState extends State<EntriesShow> {
       widgetsList.add(
         new entriesHelper.HintTile(
           text: entry.description,
-          icon: const Icon(Icons.format_quote)
+          icon: const Icon(Icons.format_quote),
+          botPadding: false,
         )
       );
     }
@@ -119,6 +120,7 @@ class _EntriesShowState extends State<EntriesShow> {
       widgetsList.add(
         new entriesHelper.HintTile.withHtmlStr(
           htmlStr: hatnote,
+          botPadding: false,
         )
       );
     }

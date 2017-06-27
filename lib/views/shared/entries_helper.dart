@@ -116,8 +116,8 @@ class ClickableImage extends StatelessWidget {
 }
 
 class HintTile extends Container {
-  HintTile({ @required String text, Icon icon: const Icon(Icons.info_outline)}) : super(
-    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+  HintTile({ @required String text, Icon icon: const Icon(Icons.info_outline), bool botPadding = true}) : super(
+    padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, ( botPadding ? 16.0 : 0.0 )),
     child: new ListTile(
       dense: true,
       leading: icon,
@@ -126,8 +126,8 @@ class HintTile extends Container {
   );
 
   // TODO there must be a better way, instead of writing most code twice
-  HintTile.withHtmlStr({ @required String htmlStr, Icon icon: const Icon(Icons.info_outline)}) : super(
-    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+  HintTile.withHtmlStr({ @required String htmlStr, Icon icon: const Icon(Icons.info_outline), bool botPadding = true}) : super(
+    padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, ( botPadding ? 16.0 : 0.0 )),
     child: new ListTile(
       leading: icon,
       title: new HtmlWrapper(htmlStr: htmlStr),
