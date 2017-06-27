@@ -39,12 +39,11 @@ class _SectionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Icon> prefixIcons =
-      ( section.id == 0 ) ?
-      ( [ const Icon(Icons.subject) ] ) :
-      ( new List<Icon>.filled(section.tocLevel, const Icon(Icons.remove)) );
+    // prefix icons
+    List<Icon> prefixIcons = new List<Icon>.filled(section.tocLevel + 1, const Icon(null));
     if (selected) { prefixIcons[0] = const Icon(Icons.label_outline);}
 
+    // content
     final Widget titleContent =
       ( section.id == 0 ) ?
       ( new Expanded( child: new Text('Main Section') ) ): // TODO use entry title?
@@ -55,7 +54,6 @@ class _SectionListTile extends StatelessWidget {
 
     final ListTile sectionTile = new ListTile(
       title: new Row( children: titleRowChildren ),
-      // leading: const Text(''),
       dense: true,
       selected: selected,
       onTap: (){
