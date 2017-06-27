@@ -144,6 +144,6 @@ class _EntriesShowState extends State<EntriesShow> {
   List<Widget> _remainingSectionsOutline () {
     if (entry.sections.length < 1) { return []; }
 
-    return sectionOutlineTiles(entry, rootSectionId: 0);
+    return sectionOutlineTiles(entry, rootSectionId: 0, inDrawer: false);
   }
 }

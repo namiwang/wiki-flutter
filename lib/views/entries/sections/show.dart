@@ -39,7 +39,7 @@ class EntriesSectionsShow extends StatelessWidget {
 
     contentWidgets
       ..add(const Divider())
-      ..addAll(sectionOutlineTiles(entry, rootSectionId: section.id));
+      ..addAll(sectionOutlineTiles(entry, rootSectionId: section.id, inDrawer: false));
 
     return new Scaffold(
       drawer: new WikiFlutterDrawer(currentEntry: entry, currentSectionId: section.id),

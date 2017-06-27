@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/entry.dart';
@@ -9,7 +10,9 @@ import '../show.dart';
 import '../sections/show.dart';
 
 // TODO may be refined after models created. maybe move code to models.
-List<Widget> sectionOutlineTiles(Entry entry, { rootSectionId: 0, selectedSectionId: null, showMainSection: false }) {
+List<Widget> sectionOutlineTiles(Entry entry, { rootSectionId: 0, selectedSectionId: null, @required bool inDrawer }) {
+  final showMainSection = inDrawer;
+
   List<Section> sections = [];
   if ( rootSectionId == 0 ) {
     sections = entry.sections;
@@ -26,48 +29,73 @@ List<Widget> sectionOutlineTiles(Entry entry, { rootSectionId: 0, selectedSectio
 
   final iterableSections = showMainSection ? sections : sections.skipWhile( (Section section) => section.id == 0 );
   return iterableSections.map((Section section){
-    return new _SectionListTile(entry, section, (section.id == selectedSectionId));
+    return new _SectionListTile(
+      entry: entry,
+      section: section,
+      inDrawer: inDrawer,
+      selected: inDrawer ? ( section.id == selectedSectionId ) : false,
+    );
   }).toList();
 }
 
 class _SectionListTile extends StatelessWidget {
   final Entry entry;
   final Section section;
+  final bool inDrawer;
   final bool selected;
 
-  _SectionListTile(this.entry, this.section, this.selected, { Key key }) : super(key: key);
+  _SectionListTile({
+    Key key,
+    @required this.entry,
+    @required this.section,
+    @required this.inDrawer,
+    @required this.selected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final leadPadding = inDrawer;
+
     // prefix icons
-    List<Icon> prefixIcons = new List<Icon>.filled(section.tocLevel + 1, const Icon(null));
-    if (selected) { prefixIcons[0] = const Icon(Icons.label_outline);}
+    List<Icon> prefixIcons = new List<Icon>.filled(section.tocLevel, const Icon(null));
 
     // content
-    final Widget titleContent =
-      ( section.id == 0 ) ?
-      ( new Expanded( child: new Text('Main Section') ) ): // TODO use entry title?
-      ( new Expanded( child: new Text( section.title ) ) );
+    final String title = section.id == 0 ? 'Main section' : section.title;
+    final Widget titleWidget = new Expanded( child: new Text(title) );
     final List<Widget> titleRowChildren = []
       ..addAll(prefixIcons)
-      ..add(titleContent);
+      ..add(titleWidget);
 
     final ListTile sectionTile = new ListTile(
-      title: new Row( children: titleRowChildren ),
       dense: true,
+      leading: leadPadding ? ( selected ? const Icon(Icons.label_outline) : const Icon(null) ) : null,
+      title: new Row( children: titleRowChildren ),
       selected: selected,
-      onTap: (){
-        // TODO HIGH PRIORITY, KINDA COMPLEX
-        // if inside the drawer, should replace current route to close the drawer, I guess
-        // if the target section is the same as the current section, should just close the drawer, I guess
-        Navigator.of(context).push(
-          new MaterialPageRoute<Null>(
-            builder: (BuildContext context) {
-              return ( section.id == 0 ) ? ( new EntriesShow( entry: entry ) ) : ( new EntriesSectionsShow(entry: entry, section: section) );
-            }
-          )
-        );
-      },
+      onTap:
+        inDrawer ?
+        (){
+          // close the drawer
+          Navigator.of(context).pop();
+
+          // NOTE if the target section is the same as the current section, just close the drawer
+          if ( selected ) { return; }
+
+          Navigator.of(context).push(
+            new MaterialPageRoute<Null>(
+              builder: (BuildContext context) {
+                return ( section.id == 0 ) ? ( new EntriesShow( entry: entry ) ) : ( new EntriesSectionsShow(entry: entry, section: section) );
+              }
+            )
+          );
+        } : (){
+          Navigator.of(context).push(
+            new MaterialPageRoute<Null>(
+              builder: (BuildContext context) {
+                return ( section.id == 0 ) ? ( new EntriesShow( entry: entry ) ) : ( new EntriesSectionsShow(entry: entry, section: section) );
+              }
+            )
+          );
+        },
     );
 
     return new _AnimatedSectionTile(sectionTile: sectionTile);

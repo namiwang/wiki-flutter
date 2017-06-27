@@ -47,11 +47,11 @@ class WikiFlutterDrawer extends StatelessWidget {
       widgets
         ..add(
           const ListTile(
-            leading: const Icon(Icons.list),
-            title: const Text('sections outline'),
+            leading: const Icon(Icons.arrow_drop_down),
+            title: const Text('Sections outline'),
           )
         )
-        ..addAll(sectionOutlineTiles(currentEntry, rootSectionId: 0, selectedSectionId: currentSectionId, showMainSection: true))
+        ..addAll(sectionOutlineTiles(currentEntry, rootSectionId: 0, selectedSectionId: currentSectionId, inDrawer: true))
         ..add(const Divider());
     }
 
