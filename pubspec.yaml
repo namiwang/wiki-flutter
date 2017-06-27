@@ -23,9 +23,8 @@ flutter:
   # To add assets to your application, add an assets section here, in
   # this "flutter" section, as in:
   assets:
-   - assets/images/placeholder.jpg
-   - assets/images/home_header.jpg
-   - assets/images/drawer_header.jpg
+    - assets/images/placeholder.jpg
+    - assets/images/home_header.jpg
 
   # To add assets from package dependencies, first ensure the asset
   # is in the lib/ directory of the dependency. Then,

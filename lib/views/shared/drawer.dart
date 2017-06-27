@@ -19,14 +19,24 @@ class WikiFlutterDrawer extends StatelessWidget {
 
     widgets
       // header
-      // TODO style, maybe use a transparent-background wiki-flutter logo img
-      ..add(new DrawerHeader(child: new Center(child: new Image.asset('assets/images/drawer_header.jpg'))))
-      // home
-      // TODO ontap
       ..add(
-        const ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text('Home'),
+        new DrawerHeader(
+          child: new Center(
+            child: new Text(
+              'Wiki Flutter',
+              style: Theme.of(context).textTheme.display1.copyWith(color: Colors.blueGrey, fontFamily: 'Serif'), // TODO specific font
+            )
+          )
+        )
+      )
+      // home
+      ..add(
+        new ListTile(
+          leading: const Icon(Icons.search),
+          title: const Text('Search the wiki'),
+          onTap: (){
+            Navigator.popAndPushNamed(context, '/');
+          },
         )
       )
       ..add( const Divider() );

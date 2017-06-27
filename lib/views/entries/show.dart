@@ -80,12 +80,9 @@ class _EntriesShowState extends State<EntriesShow> {
   }
 
   Widget _buildTitle() {
-    return
-      ( entry != null ) ? (
-        new Text(entry.displayTitle)
-      ) : (
-        new Text(widget.title)
-      );
+    final titleStyle = Theme.of(context).textTheme.title.copyWith(fontFamily: 'Serif'); // TODO shared style; TODO use specific font
+    final text = ( entry != null ) ? entry.displayTitle : widget.title;
+    return new Text(text, style: titleStyle);
   }
 
   Widget _buildCoverImg() {
