@@ -29,8 +29,6 @@ class WikiFlutterApp extends StatelessWidget {
   Route<Null> _handleRoute(RouteSettings settings) {
     print('--- handling route: ' + settings.toString());
 
-    // TODO not that elegant, check out the route lib by posse
-
     final List<String> path = settings.name.split('/');
 
     // /entries/:title
