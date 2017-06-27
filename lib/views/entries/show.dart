@@ -68,7 +68,11 @@ class _EntriesShowState extends State<EntriesShow> {
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  _buildCoverImg()
+                  _buildCoverImg(),
+                  // NOTE use this to distinguish white image from white text
+                  new Container(
+                    color: Colors.black.withAlpha(64) // TODO use a shared const var
+                  ),
                 ]
               )
             ),
@@ -80,7 +84,7 @@ class _EntriesShowState extends State<EntriesShow> {
   }
 
   Widget _buildTitle() {
-    final titleStyle = Theme.of(context).textTheme.title.copyWith(fontFamily: 'Serif'); // TODO shared style; TODO use specific font
+    final titleStyle = Theme.of(context).textTheme.title.copyWith(color: Colors.white, fontFamily: 'Serif'); // TODO shared style; TODO use specific font
     final text = ( entry != null ) ? entry.displayTitle : widget.title;
     return new Text(text, style: titleStyle);
   }

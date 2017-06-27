@@ -54,7 +54,11 @@ class EntriesSectionsShow extends StatelessWidget {
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  new Image.asset('assets/images/placeholder.jpg', fit: BoxFit.cover)
+                  new Image.asset('assets/images/placeholder.jpg', fit: BoxFit.cover),
+                  // NOTE use this to distinguish white image from white text
+                  new Container(
+                    color: Colors.black.withAlpha(64) // TODO use a shared const var
+                  ),
                 ]
               )
             ),
