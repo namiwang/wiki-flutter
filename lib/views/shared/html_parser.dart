@@ -77,6 +77,14 @@ class HtmlParser {
         for (var subNode in element.nodes) { _parseNode(subNode); }
 
         return;
+      case 'li':
+        // TODO missing key features, treating just as div
+        _tryCloseCurrentTextSpan();
+
+        // traverse down the tree
+        for (var subNode in element.nodes) { _parseNode(subNode); }
+
+        return;
       case 'figure': // TODO
         _tryCloseCurrentTextSpan();
 
