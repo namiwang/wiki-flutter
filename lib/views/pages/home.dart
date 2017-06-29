@@ -14,6 +14,7 @@ class PagesHome extends StatefulWidget {
 
 class _PagesHomeState extends State<PagesHome> {
   final _searchFetcher = new _Fetcher();
+  String _searchingQuery = ''; // TODO VENDOR flutter's TextEditing's onchange callback doesn't expose oldValue for now
   List<_EntryWithSummary> _fetchedSearchingEntries = []; // NOTE null means loading
 
   @override
@@ -86,14 +87,11 @@ class _PagesHomeState extends State<PagesHome> {
   void _handleSearchTextChanged(String str) {
     print('TRIGGERED searchTextchangedTo $str');
 
-    if (str == '') {
-      setState((){
-        _fetchedSearchingEntries = [];
-      });
-      return;
-    }
+    if (str == _searchingQuery) { return; }
+    if (str == '') { return; }
 
     setState((){
+      _searchingQuery = str;
       _fetchedSearchingEntries = null;
     });
 
