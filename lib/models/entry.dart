@@ -7,7 +7,8 @@ import 'package:html/dom.dart' as html;
 
 import '../shared/wiki_client.dart' as wikiClient;
 
-import '../views/shared/html_parser.dart';
+import '../views/shared/html_wrap.dart';
+import '../views/shared/entries_helper.dart';
 
 class Entry {
   final String displayTitle;
@@ -19,7 +20,7 @@ class Entry {
   Map<String, String> citings;
 
   Entry(Map map)
-    : displayTitle = parseInlineHtml( map['lead']['displaytitle'] as String ),
+    : displayTitle = inlineHtmlWrap( map['lead']['displaytitle'] as String ),
       description = map['lead']['description'],
       coverImgSrc = _extractCoverImgSrc(map),
       hatnotes = _extractHatnotes(map),
@@ -48,7 +49,7 @@ class Entry {
     return ( map['lead']['sections'] as List ).map((Map section){
       final int id = section['id'];
       final int tocLevel = id == 0 ? 0 : section['toclevel'];
-      final String title = id == 0 ? null : parseInlineHtml(section['line']);
+      final String title = id == 0 ? null : inlineHtmlWrap(section['line']);
       final String anchor = id == 0 ? null : section['anchor'];
       final String htmlText = id == 0 ? section['text'] : map['remaining']['sections'][id - 1]['text'];
       final bool isReferenceSection = id == 0 ? false : ( map['remaining']['sections'][id - 1]['isReferenceSection'] ?? false );

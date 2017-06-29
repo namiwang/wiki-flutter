@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:html/dom.dart' as html;
+import 'package:html/parser.dart' as html show parse;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/entry.dart';
 
 import './html_parser.dart';
-import './html_wrapper.dart';
+import './html_wrap.dart';
 
 class SectionHtmlWrapper extends StatelessWidget {
   final Entry entry;
@@ -19,7 +21,7 @@ class SectionHtmlWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (new HtmlParser(context, appContext: {'entry': entry}).parse(entry.sections[sectionId].htmlText));
+    return (new HtmlParser(context, appContext: {'entry': entry}).parseFromStr(entry.sections[sectionId].htmlText));
   }
 }
 
@@ -78,7 +80,7 @@ TextSpan refLink({Entry entry, BuildContext context, String anchor, String text}
         return new Container(
           child: new Padding(
             padding: const EdgeInsets.all(32.0),
-            child: new HtmlWrapper(htmlStr: citingHtmlStr),
+            child: new HtmlWrap(htmlStr: citingHtmlStr),
           )
         );
       });
@@ -102,8 +104,19 @@ class HintTile extends Container {
     padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, ( botPadding ? 16.0 : 0.0 )),
     child: new ListTile(
       leading: icon,
-      title: new HtmlWrapper(htmlStr: htmlStr),
+      title: new HtmlWrap(htmlStr: htmlStr),
       dense: true,
     )
   );
+}
+
+// TODO refine
+// only used for extractionHatnotes in section's content
+// PERFORMANCE HELL this is another time of parsing
+// and currently we're parsing all sections when parsing the entry, which lead to freezing
+// maybe should the htmlParser.parse return both widget and hatenotes list
+List<String> extractHatnotes(String htmlStr) {
+  final elements = html.parse(htmlStr).querySelectorAll('div.hatnote');
+  if (elements.isEmpty) { return []; }
+  return elements.map((html.Element e){ return e.innerHtml ;}).toList();
 }

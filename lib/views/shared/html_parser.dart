@@ -5,7 +5,7 @@ import 'package:html/dom.dart' as html;
 
 import './entries_helper.dart' as entriesHelper;
 
-import './clickable_image.dart';
+import './image_with_loader.dart';
 
 class HtmlParser {
   final BuildContext context;
@@ -18,18 +18,22 @@ class HtmlParser {
   List<Widget> _widgets = [];
   List<TextSpan> _currentTextSpans = [];
 
-  Widget parse (String htmlStr) {
+  Widget parseFromElement (html.Element element) {
     print('*** parsing html...');
-    // print('HtmlParser parsing: ' + htmlStr);
 
-    // html to dom
-    final html.Node body = html.parse(htmlStr).body;
-
-    // 
-    _parseNode(body);
+    _parseNode(element);
     _tryCloseCurrentTextSpan();
 
-    // _debugPrintWidgets();
+    return new Wrap(children: _widgets);
+  }
+
+  Widget parseFromStr (String htmlStr) {
+    print('*** parsing html...');
+
+    final html.Node body = html.parse(htmlStr).body;
+
+    _parseNode(body);
+    _tryCloseCurrentTextSpan();
 
     return new Wrap(children: _widgets);
   }
@@ -106,7 +110,7 @@ class HtmlParser {
         } else {
           _tryCloseCurrentTextSpan();
 
-          final img = new ClickableImage(imgSrc);
+          final img = new ImageWithLoader(imgSrc);
           _widgets.add(
             new Container(
               padding: const EdgeInsets.all(8.0),
@@ -241,24 +245,4 @@ class HtmlParser {
   //   print(lines.join('\n'));
   // }
 
-}
-
-// for section name, entry title, etc
-// this is a quick, yet not elegant way to parse inline html
-// it just remove all expecting tags and return a string
-String parseInlineHtml(String htmlStr) {
-  print('*** parsing inline html...');
-
-  return htmlStr.replaceAll(new RegExp("<\/*(i|b|span)>"), '');
-}
-
-// TODO refine
-// only used for extractionHatnotes in section's content
-// PERFORMANCE HELL this is another time of parsing
-// and currently we're parsing all sections when parsing the entry, which lead to freezing
-// maybe should the htmlParser.parse return both widget and hatenotes list
-List<String> extractHatnotes(String htmlStr) {
-  final elements = html.parse(htmlStr).querySelectorAll('div.hatnote');
-  if (elements.isEmpty) { return []; }
-  return elements.map((html.Element e){ return e.innerHtml ;}).toList();
 }
