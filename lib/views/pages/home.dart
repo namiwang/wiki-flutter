@@ -15,7 +15,7 @@ class PagesHome extends StatefulWidget {
 class _PagesHomeState extends State<PagesHome> {
   final _searchFetcher = new _Fetcher();
   String _searchingQuery = ''; // TODO VENDOR flutter's TextEditing's onchange callback doesn't expose oldValue for now
-  List<_EntryWithSummary> _fetchedSearchingEntries = []; // NOTE null means loading
+  List<_EntryWithSummary> _fetchedSearchingEntries = []; // NOTE use `null` to represent loading
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +81,7 @@ class _PagesHomeState extends State<PagesHome> {
     );
   }
 
-  // TODO PERFORMANCE
-  // TO FILE ISSUE
-  // got triggered multiple times when using Google Chinese IME
   void _handleSearchTextChanged(String str) {
-    print('TRIGGERED searchTextchangedTo $str');
-
     if (str == _searchingQuery) { return; }
     if (str == '') { return; }
 
