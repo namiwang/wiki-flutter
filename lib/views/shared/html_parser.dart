@@ -94,17 +94,27 @@ class HtmlParser {
         return;
       // TODO fig caption
       case 'img':
-        _tryCloseCurrentTextSpan();
+        // NOTE assuming img with width=height=11 as inline image icon
 
+        final isInlineIcon = (element.attributes['height'] == "11" && element.attributes['width'] == "11");
         final imgSrc = 'https:' + element.attributes['src'];
-        final img = new ClickableImage(imgSrc);
-        _widgets.add(
-          new Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: FractionalOffset.center,
-            child: img
-          )
-        );
+
+        if ( isInlineIcon ) {
+          // TODO REPLY ON VENDOR
+          // flutter currently dont support inline image/icon in textspan
+          // final icon = new ImageIcon(new NetworkImage(imgSrc));
+        } else {
+          _tryCloseCurrentTextSpan();
+
+          final img = new ClickableImage(imgSrc);
+          _widgets.add(
+            new Container(
+              padding: const EdgeInsets.all(8.0),
+              alignment: FractionalOffset.center,
+              child: img
+            )
+          );
+        }
 
         return;
       case 'table':
