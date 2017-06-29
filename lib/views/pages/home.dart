@@ -66,10 +66,10 @@ class _PagesHomeState extends State<PagesHome> {
 
   Widget _searchBar(){
     return new Container(
-      padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
       child: new Card(
         child: new Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          margin: const EdgeInsets.only(right: 8.0),
           child: new TextField(
             onChanged: _handleSearchTextChanged,
             decoration: const InputDecoration(
@@ -100,32 +100,38 @@ class _PagesHomeState extends State<PagesHome> {
   List<Widget> _buildEntriesList (BuildContext context) {
     List<Widget> list = [];
 
-    for ( _EntryWithSummary e in _fetchedSearchingEntries ) {
-      list
-        ..add(
-          new ListTile(
-            isThreeLine: true,
-            dense: true,
-            title: new Text(e.title),
-            subtitle: new RichText(
-              text: new TextSpan(text: e.summary, style: Theme.of(context).textTheme.caption),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+    if ( _fetchedSearchingEntries.isNotEmpty ) {
+      for ( _EntryWithSummary e in _fetchedSearchingEntries ) {
+        list
+          ..add(
+            new ListTile(
+              isThreeLine: true,
+              dense: true,
+              title: new Text(e.title),
+              subtitle: new RichText(
+                text: new TextSpan(text: e.summary, style: Theme.of(context).textTheme.caption),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+              onTap: (){ Navigator.pushNamed(context, "/entries/${e.title}"); }
             ),
-            onTap: (){ Navigator.pushNamed(context, "/entries/${e.title}"); }
-          ),
-        )
-        ..add( const Divider() );
+          )
+          ..add( const Divider() );
+      }
+
+      list.removeLast(); // remove last divider
     }
 
-    return [ new Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
-      child: new Card(
-        child: new Column(
-          children: list
-        ),
+    return [
+      new Container(
+        margin: const EdgeInsets.all(8.0),
+        child: new Card(
+          child: new Column(
+            children: list
+          ),
+        )
       )
-    ) ];
+    ];
   }
 }
 
