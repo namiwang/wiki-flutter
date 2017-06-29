@@ -124,6 +124,22 @@ class HtmlParser {
       case 'table':
         _tryCloseCurrentTextSpan();
 
+        // infobox
+        if (element.classes.contains('infobox')) {
+          _widgets.add(
+            new Container(
+              padding: const EdgeInsets.all(8.0),
+              child: new Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: FractionalOffset.center,
+                child: _parseInfobox(element)
+              ),
+            )
+          );
+
+          return;
+        }
+
         _widgets.add(
           new entriesHelper.HintTile(
             text: 'WikiFlutter is still in alpha and doesn\'t support tables for now.',
@@ -245,4 +261,39 @@ class HtmlParser {
   //   print(lines.join('\n'));
   // }
 
+  Column _parseInfobox(html.Element table) {
+    final borderColor = Theme.of(context).accentColor;
+    final borderSide = new BorderSide(color: borderColor);
+    final borderForFirstRow = new Border.all(color: borderColor);
+    final borderForRemainingRows = new Border(
+      left: borderSide, top: BorderSide.none, right: borderSide, bottom: borderSide
+    );
+
+    final List<html.Element> rowElements = table.querySelectorAll('tr').toList();
+    List<Widget> rows = [];
+    for (int i = 0; i < rowElements.length; i++){
+      final r = rowElements[i];
+      List<Widget> columns = r.children.where((html.Element e) => e.localName == 'td' || e.localName == 'th').map((td){
+        return new Expanded(
+          child: new Container(
+            alignment: FractionalOffset.center,
+            child: ( new HtmlParser(context).parseFromElement(td) ),
+          ),
+        );
+      }).toList();
+
+      rows.add(
+        new Container(
+          child: new Row(
+            children: columns
+          ),
+          decoration: new BoxDecoration( border: i == 0 ? borderForFirstRow : borderForRemainingRows ),
+        )
+      );
+    }
+
+    return new Column(
+      children: rows
+    );
+  }
 }

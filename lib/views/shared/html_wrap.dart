@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:html/dom.dart' as html;
-
 import './html_parser.dart';
 
 // parse a fragment of html string into a widget
 class HtmlWrap extends StatelessWidget {
   final String htmlStr;
-  final html.Element htmlElement;
 
-  HtmlWrap({ Key key, this.htmlStr, this.htmlElement }) : super(key: key);
+  HtmlWrap({ Key key, this.htmlStr }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    assert(htmlElement != null || htmlStr != null);
-
-    if ( htmlElement != null ) {
-      return (new HtmlParser(context)).parseFromElement(htmlElement);
-    } else {
-      return (new HtmlParser(context)).parseFromStr(htmlStr);
-    }
+    return (new HtmlParser(context)).parseFromStr(htmlStr);
   }
 }
 
