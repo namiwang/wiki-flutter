@@ -133,7 +133,7 @@ class _EntriesShowState extends State<EntriesShow> {
           padding: const EdgeInsets.all(16.0),
           child: new entriesHelper.SectionHtmlWrapper(entry: entry, sectionId: 0))
         )
-      ..add(const Divider());
+      ..add(const Divider());// TODO should not show divider if there're actually no sections outline
 
     // remaining sections list
     widgetsList.addAll(_remainingSectionsOutline());

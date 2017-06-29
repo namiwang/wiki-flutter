@@ -5,7 +5,7 @@ import 'package:html/dom.dart' as html;
 
 import './entries_helper.dart' as entriesHelper;
 
-import './image_with_loader.dart';
+import './clickable_image.dart';
 
 class HtmlParser {
   final BuildContext context;
@@ -89,7 +89,7 @@ class HtmlParser {
         _tryCloseCurrentTextSpan();
 
         final imgSrc = 'https:' + element.attributes['src'];
-        final img = new entriesHelper.ClickableImage(image: new ImageWithLoader(imgSrc));
+        final img = new ClickableImage(imgSrc);
         _widgets.add(
           new Container(
             padding: const EdgeInsets.all(8.0),

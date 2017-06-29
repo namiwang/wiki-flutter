@@ -38,7 +38,7 @@ class EntriesSectionsShow extends StatelessWidget {
     );
 
     contentWidgets
-      ..add(const Divider())
+      ..add(const Divider()) // TODO should not show divider if there're actually no sections outline
       ..addAll(sectionOutlineTiles(entry, rootSectionId: section.id, inDrawer: false));
 
     return new Scaffold(
