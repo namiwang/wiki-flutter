@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // TODO checkout FutureBuilder
@@ -14,7 +15,7 @@ import 'package:flutter/material.dart';
 class ImageWithLoader extends StatefulWidget {
   final String imgSrc;
 
-  ImageWithLoader(this.imgSrc, { Key key }) : super(key: key);
+  ImageWithLoader(@required this.imgSrc, { Key key }) : super(key: key);
 
   @override
   ImageWithLoaderState createState() => new ImageWithLoaderState();
