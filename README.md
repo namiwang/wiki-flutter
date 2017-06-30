@@ -2,7 +2,7 @@
 
 Wiki Flutter tends to be more than an elegant wikipedia reader.
 
-It's also an experimental app with the Flutter SDK.
+It's also an experimental app with the Flutter SDK, the Wikipedia's new RESTful API, integrating Firebase in Flutter, and HTML parsing and composing in Flutter.
 
 Feedback is most welcome.
 
