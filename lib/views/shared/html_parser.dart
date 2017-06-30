@@ -142,7 +142,7 @@ class HtmlParser {
 
         _widgets.add(
           new entriesHelper.HintTile(
-            text: 'WikiFlutter is still in alpha and doesn\'t support tables for now.',
+            text: 'WikiFlutter is still in alpha and doesn\'t support complex tables for now.',
             icon: const Icon(Icons.border_all),
           )
         );

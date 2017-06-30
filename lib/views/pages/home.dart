@@ -28,18 +28,17 @@ class _PagesHomeState extends State<PagesHome> {
             floating: true,
             snap: true,
             flexibleSpace: new FlexibleSpaceBar(
-              title: new Text('Wiki Flutter'),
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  new Image.asset(
-                    "assets/images/home_header.jpg",
-                    fit: BoxFit.cover,
-                    height: 256.0
-                  ),
-                ]
+                  new Container(
+                    child: new Center(
+                      child: new _AnimatedTitleText()
+                    ),
+                  )
+                ],
               )
-            ),
+            )
           ),
           new SliverList(
             delegate: new SliverChildListDelegate([_searchBar()])
@@ -107,7 +106,7 @@ class _PagesHomeState extends State<PagesHome> {
             new ListTile(
               isThreeLine: true,
               dense: true,
-              title: new Text(e.title),
+              title: new Text(e.title,),
               subtitle: new RichText(
                 text: new TextSpan(text: e.summary, style: Theme.of(context).textTheme.caption),
                 maxLines: 3,
@@ -176,4 +175,52 @@ class _EntryWithSummary {
   final String title;
   final String summary;
   _EntryWithSummary({this.title, this.summary});
+}
+
+class _AnimatedTitleText extends StatefulWidget {
+  const _AnimatedTitleText({ Key key }) : super(key: key);
+
+  @override
+  _AnimatedTitleTextState createState() => new _AnimatedTitleTextState();
+}
+
+class _AnimatedTitleTextState extends State<_AnimatedTitleText> {
+  final String fullText = "Wiki Flutter";
+  String _currentString = "";
+  Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    new Timer(
+      const Duration(milliseconds: 1024),
+      _start
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Text(
+      _currentString,
+      style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white, fontFamily: 'Serif'), // TODO specific font
+    );
+  }
+
+  void _start(){
+    _timer = new Timer.periodic(const Duration(milliseconds: 64), (Timer timer){
+      final newLength = _currentString.length + 1;
+      if ( newLength > fullText.length ) {
+        _stop();
+      } else {
+        setState((){
+          _currentString = fullText.substring(0, newLength);
+        });
+      }
+    });
+  }
+
+  void _stop(){
+    _timer.cancel();
+  }
 }
