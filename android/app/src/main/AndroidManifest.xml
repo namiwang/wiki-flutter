@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nanowang.wikiflutter"
-    android:versionCode="2"
-    android:versionName="0.0.2">
+    android:versionCode="3"
+    android:versionName="alpha-0.0.3">
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 

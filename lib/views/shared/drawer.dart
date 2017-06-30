@@ -71,7 +71,7 @@ class WikiFlutterDrawer extends StatelessWidget {
 
     return new AboutListTile(
       icon: const FlutterLogo(),
-      applicationVersion: 'pre-alpha', // TODO
+      applicationVersion: 'alpha-0.0.3', // TODO
       applicationIcon: const FlutterLogo(), // TODO
       applicationLegalese: '© NanoWANG',
       aboutBoxChildren: <Widget>[
