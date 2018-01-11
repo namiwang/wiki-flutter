@@ -71,9 +71,9 @@ class WikiFlutterDrawer extends StatelessWidget {
 
     return new AboutListTile(
       icon: const FlutterLogo(),
-      applicationVersion: 'alpha-0.0.3', // TODO
+      applicationVersion: 'alpha-0.0.4', // TODO
       applicationIcon: const FlutterLogo(), // TODO
-      applicationLegalese: '© NanoWANG',
+      applicationLegalese: '© NamiWANG',
       aboutBoxChildren: <Widget>[
         new Padding(
           padding: const EdgeInsets.only(top: 24.0),
@@ -94,8 +94,8 @@ class WikiFlutterDrawer extends StatelessWidget {
                 ),
                 new _LinkTextSpan(
                   style: linkStyle,
-                  text: 'github:nanowang/wiki-flutter',
-                  url: 'https://github.com/nanowang/wiki-flutter'
+                  text: 'github:namiwang/wiki-flutter',
+                  url: 'https://github.com/namiwang/wiki-flutter'
                 ),
               ]
             )

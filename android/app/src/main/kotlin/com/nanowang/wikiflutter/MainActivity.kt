@@ -1,4 +1,4 @@
-package com.nanowang.wikiflutter
+package com.namiwang.wikiflutter
 
 import android.os.Bundle
 
