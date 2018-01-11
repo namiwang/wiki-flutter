@@ -31,8 +31,8 @@ android {
         applicationId "com.nanowang.wikiflutter"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 3
-        versionName "alpha-0.0.3"
+        versionCode 4
+        versionName "alpha-0.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
