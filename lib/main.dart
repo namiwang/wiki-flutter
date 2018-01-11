@@ -12,7 +12,9 @@ class WikiFlutterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Banner(
       message: 'Alpha',
-      location: BannerLocation.topRight,
+      location: BannerLocation.topEnd,
+      textDirection: TextDirection.ltr,
+      layoutDirection: TextDirection.ltr,
       child: new MaterialApp(
         title: 'WikiFlutter',
         theme: new ThemeData(
