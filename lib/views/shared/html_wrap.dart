@@ -18,7 +18,7 @@ class HtmlWrap extends StatelessWidget {
 // this is a quick, yet not elegant way to parse inline html
 // it just remove all expecting tags and return a string
 String inlineHtmlWrap(String htmlStr) {
-  print('*** parsing inline html...');
+  // print('*** parsing inline html...');
 
   return htmlStr.replaceAll(new RegExp("<\/*(i|b|span)>"), '');
 }

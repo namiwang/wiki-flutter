@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
+import './config/application.dart';
+
 import './views/pages/home.dart';
-import './views/entries/show.dart';
 
 void main() {
-  runApp(new WikiFlutterApp());
+  Application.initApp();
+
+  runApp(new App());
 }
 
-class WikiFlutterApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Banner(
@@ -20,30 +23,10 @@ class WikiFlutterApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) => new PagesHome(),
-        },
-        onGenerateRoute: _handleRoute,
+        home: new PagesHome(),
+        onGenerateRoute: Application.router.generator,
       )
     );
-  }
-
-  Route<Null> _handleRoute(RouteSettings settings) {
-    print('--- handling route: ' + settings.toString());
-
-    final List<String> path = settings.name.split('/');
-
-    // /entries/:title
-    if ( path.length == 3 && path[0] == '' && path[1] == 'entries' ) {
-      final String title = path[2];
-
-      return new MaterialPageRoute<Null>(
-        settings: settings,
-        builder: (BuildContext context) => new EntriesShow(title: title)
-      );
-    }
-
-    return null;
   }
 
 }

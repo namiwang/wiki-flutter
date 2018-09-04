@@ -41,12 +41,13 @@ class Entry {
   }
 
   static List<String> _extractHatnotes(Map map) {
-    //  \"EU\" redirects here. For other uses, see <a href=\"/wiki/EU_(disambiguation)\" title=\"EU (disambiguation)\">EU (disambiguation)</a>.
-    return ( map['lead']['hatnotes'] ?? [] ) as List;
+    if ( map['lead']['hatnotes'] == null ) { return []; }
+
+    return ( map['lead']['hatnotes'] as List ).map((h){ return h as String; }).toList();
   }
 
   static List<Section> _extractSections(Map map){
-    return ( map['lead']['sections'] as List ).map((Map section){
+    return ( map['lead']['sections'] as List ).cast<Map>().map((Map section){
       final int id = section['id'];
       final int tocLevel = id == 0 ? 0 : section['toclevel'];
       final String title = id == 0 ? null : inlineHtmlWrap(section['line']);

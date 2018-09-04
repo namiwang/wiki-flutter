@@ -19,7 +19,7 @@ class HtmlParser {
   List<TextSpan> _currentTextSpans = [];
 
   Widget parseFromElement (html.Element element) {
-    print('*** parsing html...');
+    // print('*** parsing html...');
 
     _parseNode(element);
     _tryCloseCurrentTextSpan();
@@ -28,7 +28,7 @@ class HtmlParser {
   }
 
   Widget parseFromStr (String htmlStr) {
-    print('*** parsing html...');
+    // print('*** parsing html...');
 
     final html.Node body = html.parse(htmlStr).body;
 
@@ -192,7 +192,7 @@ class HtmlParser {
 
         return;
       default:
-        print('=== MET UNSUPPORTED TAG: ${element.localName}');
+        // print('=== MET UNSUPPORTED TAG: ${element.localName}');
 
         // still traverse down the tree
         for (var subNode in element.nodes) { _parseNode(subNode); }

@@ -19,7 +19,6 @@ class _PagesHomeState extends State<PagesHome> {
 
   @override
   Widget build(BuildContext context) {
-    print('************ REBUILDING PagesHome');
     return new Scaffold(
       body: new CustomScrollView(
         slivers: <Widget>[
@@ -149,11 +148,7 @@ class _Fetcher {
 
     final String url = "https://en.wikipedia.org/w/api.php?action=opensearch&format=json&errorformat=bc&search=$str&namespace=0&limit=10&suggest=1&utf8=1&formatversion=2";
 
-    print('UUU fetching $str');
-
-    final List fetched = JSON.decode( await client.read(url) ) as List;
-
-    print('UUU fetched');
+    final List fetched = json.decode( await client.read(url) ) as List;
 
     client.close();
 
